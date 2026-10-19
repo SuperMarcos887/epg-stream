@@ -1,0 +1,50 @@
+name: Update EPG
+
+on:
+  schedule:
+    # Si avvia in automatico ogni giorno alle 04:30 UTC
+    - cron: '30 4 * * *'
+  # Consente l'avvio manuale quando vuoi
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configura Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installa dipendenze
+        run: pip install requests
+
+      - name: Scarica, unisci e filtra EPG
+        run: python merge_epg.py
+
+      - name: Configura Pages
+        uses: actions/configure-pages@v5
+
+      - name: Carica artefatto Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy su GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
