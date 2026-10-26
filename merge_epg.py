@@ -43,7 +43,7 @@ ID_MAPPING = {
     "nove": ["Nove.it", "nove"],
     "Nove.it": ["Nove.it", "nove"],
 
-    # Sport Italia - Sky & DAZN
+    # Sport Italia - Sky
     "Sky.Sport.Uno.it": ["Sky.Sport.Uno.it", "SkySportUno.it"],
     "SkySportUno.it": ["Sky.Sport.Uno.it", "SkySportUno.it"],
     "Sky.Sport.Calcio.it": ["Sky.Sport.Calcio.it", "SkySportCalcio.it"],
@@ -56,10 +56,14 @@ ID_MAPPING = {
     "SkySportF1.it": ["Sky.Sport.F1.it", "SkySportF1.it"],
     "Sky.Sport.MotoGP.it": ["Sky.Sport.MotoGP.it", "SkySportMotoGP.it"],
     "SkySportMotoGP.it": ["Sky.Sport.MotoGP.it", "SkySportMotoGP.it"],
-    "Zona.DAZN.it": ["Zona.DAZN.it", "zonadazn.it"],
-    "zonadazn.it": ["Zona.DAZN.it", "zonadazn.it"],
 
-    # Sky Calcio / Canali Multi-Evento (con gestione del doppio punto di IT1 e punto singolo)
+    # DAZN / ZONA DAZN (con gestione del doppio suffisso DAZN.1.it.it di IT1)
+    "DAZN.1.it.it": ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
+    "DAZN.1.it":    ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
+    "Zona.DAZN.it": ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
+    "zonadazn.it":  ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
+
+    # Sky Calcio / Canali Multi-Evento (con gestione doppio punto IT1 e punto singolo)
     "Sky.Sport..251.it": ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
     "Sky.Sport.251.it":  ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
     "SkyCalcio1.it":     ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
