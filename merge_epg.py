@@ -59,19 +59,37 @@ ID_MAPPING = {
     "Zona.DAZN.it": ["Zona.DAZN.it", "zonadazn.it"],
     "zonadazn.it": ["Zona.DAZN.it", "zonadazn.it"],
 
-    # Sky Sport Calcio Canali Multi-Evento (251-254)
-    "Sky.Sport.251.it": ["Sky.Sport.251.it", "SkyCalcio1.it", "SkySport251.it"],
-    "SkyCalcio1.it": ["Sky.Sport.251.it", "SkyCalcio1.it", "SkySport251.it"],
-    "SkySport251.it": ["Sky.Sport.251.it", "SkyCalcio1.it", "SkySport251.it"],
-    "Sky.Sport.252.it": ["Sky.Sport.252.it", "SkyCalcio2.it", "SkySport252.it"],
-    "SkyCalcio2.it": ["Sky.Sport.252.it", "SkyCalcio2.it", "SkySport252.it"],
-    "SkySport252.it": ["Sky.Sport.252.it", "SkyCalcio2.it", "SkySport252.it"],
-    "Sky.Sport.253.it": ["Sky.Sport.253.it", "SkyCalcio3.it", "SkySport253.it"],
-    "SkyCalcio3.it": ["Sky.Sport.253.it", "SkyCalcio3.it", "SkySport253.it"],
-    "SkySport253.it": ["Sky.Sport.253.it", "SkyCalcio3.it", "SkySport253.it"],
-    "Sky.Sport.254.it": ["Sky.Sport.254.it", "SkyCalcio4.it", "SkySport254.it"],
-    "SkyCalcio4.it": ["Sky.Sport.254.it", "SkyCalcio4.it", "SkySport254.it"],
-    "SkySport254.it": ["Sky.Sport.254.it", "SkyCalcio4.it", "SkySport254.it"],
+    # Sky Calcio / Canali Multi-Evento (con gestione del doppio punto di IT1 e punto singolo)
+    "Sky.Sport..251.it": ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
+    "Sky.Sport.251.it":  ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
+    "SkyCalcio1.it":     ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
+
+    "Sky.Sport..252.it": ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
+    "Sky.Sport.252.it":  ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
+    "SkyCalcio2.it":     ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
+
+    "Sky.Sport..253.it": ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
+    "Sky.Sport.253.it":  ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
+    "SkyCalcio3.it":     ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
+
+    "Sky.Sport..254.it": ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
+    "Sky.Sport.254.it":  ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
+    "SkyCalcio4.it":     ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
+
+    "Sky.Sport..255.it": ["Sky.Sport..255.it", "Sky.Sport.255.it"],
+    "Sky.Sport.255.it":  ["Sky.Sport..255.it", "Sky.Sport.255.it"],
+
+    "Sky.Sport..256.it": ["Sky.Sport..256.it", "Sky.Sport.256.it"],
+    "Sky.Sport.256.it":  ["Sky.Sport..256.it", "Sky.Sport.256.it"],
+
+    "Sky.Sport..257.it": ["Sky.Sport..257.it", "Sky.Sport.257.it"],
+    "Sky.Sport.257.it":  ["Sky.Sport..257.it", "Sky.Sport.257.it"],
+
+    "Sky.Sport..258.it": ["Sky.Sport..258.it", "Sky.Sport.258.it"],
+    "Sky.Sport.258.it":  ["Sky.Sport..258.it", "Sky.Sport.258.it"],
+
+    "Sky.Sport..259.it": ["Sky.Sport..259.it", "Sky.Sport.259.it"],
+    "Sky.Sport.259.it":  ["Sky.Sport..259.it", "Sky.Sport.259.it"],
 
     # Canali Club & DTT Sport
     "inter-it": ["inter-it", "Inter.TV.it"],
