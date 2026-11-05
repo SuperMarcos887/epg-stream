@@ -5,23 +5,23 @@ import tempfile
 import xml.etree.ElementTree as ET
 import requests
 
-# 1. Sorgenti EPG complete (con aggiunta di Germania DE1 e Brasile BR1, BR2)
+# 1. Sorgenti EPG complete (incluse DE1 per Sky Sport Germania/Austria e BR1/BR2 per ESPN Brasile)
 EPG_URLS = [
     "http://epg-guide.com/wltv.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_IT1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_DE1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_PL1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_CZ1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_CH1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_AU1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_DE1.xml.gz",  # Sky Sport DE & Austria
+    "https://epgshare01.online/epgshare01/epg_ripper_BR1.xml.gz",  # ESPN 1-6 Brasil
+    "https://epgshare01.online/epgshare01/epg_ripper_BR2.xml.gz",  # ESPN Brasil Backup
+    "https://epgshare01.online/epgshare01/epg_ripper_PL1.xml.gz",  # Eleven / Canal+ PL
+    "https://epgshare01.online/epgshare01/epg_ripper_CZ1.xml.gz",  # Canal+ Sport CZ / Sport1-2
+    "https://epgshare01.online/epgshare01/epg_ripper_CH1.xml.gz",  # Svizzera (RSI)
+    "https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz",  # FOX Sport 4K, CBS Golazo
+    "https://epgshare01.online/epgshare01/epg_ripper_AU1.xml.gz",  # beIN Sports AU
     "https://epgshare01.online/epgshare01/epg_ripper_HR1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_PT1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_PT1.xml.gz",  # Sport TV PT & DAZN PT
     "https://epgshare01.online/epgshare01/epg_ripper_IE1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_MX1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_MX1.xml.gz",  # ESPN MX
     "https://epgshare01.online/epgshare01/epg_ripper_PH1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_BR1.xml.gz",
-    "https://epgshare01.online/epgshare01/epg_ripper_BR2.xml.gz",
 ]
 
 # 2. Mappatura completa e bidirezionale (qualsiasi variante -> lista target da generare)
@@ -60,7 +60,7 @@ ID_MAPPING = {
     "Sky.Sport.MotoGP.it": ["Sky.Sport.MotoGP.it", "SkySportMotoGP.it"],
     "SkySportMotoGP.it": ["Sky.Sport.MotoGP.it", "SkySportMotoGP.it"],
 
-    # DAZN / ZONA DAZN (con gestione del doppio suffisso DAZN.1.it.it di IT1)
+    # DAZN / ZONA DAZN
     "DAZN.1.it.it": ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
     "DAZN.1.it":    ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
     "Zona.DAZN.it": ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
@@ -70,23 +70,31 @@ ID_MAPPING = {
     "Sky.Sport..251.it": ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
     "Sky.Sport.251.it":  ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
     "SkyCalcio1.it":     ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
+
     "Sky.Sport..252.it": ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
     "Sky.Sport.252.it":  ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
     "SkyCalcio2.it":     ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
+
     "Sky.Sport..253.it": ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
     "Sky.Sport.253.it":  ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
     "SkyCalcio3.it":     ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
+
     "Sky.Sport..254.it": ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
     "Sky.Sport.254.it":  ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
     "SkyCalcio4.it":     ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
+
     "Sky.Sport..255.it": ["Sky.Sport..255.it", "Sky.Sport.255.it"],
     "Sky.Sport.255.it":  ["Sky.Sport..255.it", "Sky.Sport.255.it"],
+
     "Sky.Sport..256.it": ["Sky.Sport..256.it", "Sky.Sport.256.it"],
     "Sky.Sport.256.it":  ["Sky.Sport..256.it", "Sky.Sport.256.it"],
+
     "Sky.Sport..257.it": ["Sky.Sport..257.it", "Sky.Sport.257.it"],
     "Sky.Sport.257.it":  ["Sky.Sport..257.it", "Sky.Sport.257.it"],
+
     "Sky.Sport..258.it": ["Sky.Sport..258.it", "Sky.Sport.258.it"],
     "Sky.Sport.258.it":  ["Sky.Sport..258.it", "Sky.Sport.258.it"],
+
     "Sky.Sport..259.it": ["Sky.Sport..259.it", "Sky.Sport.259.it"],
     "Sky.Sport.259.it":  ["Sky.Sport..259.it", "Sky.Sport.259.it"],
 
@@ -114,114 +122,68 @@ ID_MAPPING = {
     # USA & Messico
     "CBS.Sports.Golazo.Network.us2": ["CBS.Sports.Golazo.Network.us2"],
     "Fox.Deportes.HD.us2": ["Fox.Deportes.HD.us2"],
+    "Fox.Sports.4K.us2": ["Fox.Sports.4K.us2", "FoxSports4K.us2"],
+    "FoxSports4K.us2":   ["Fox.Sports.4K.us2", "FoxSports4K.us2"],
     "ESPN.MX.mx": ["ESPN.MX.mx"],
     "ESPN.2.mx": ["ESPN.2.mx"],
     "ESPN.3.mx": ["ESPN.3.mx"],
     "ESPN.4.mx": ["ESPN.4.mx"],
     "ESPN.5.mx": ["ESPN.4.mx", "ESPN.5.mx"],
 
-    # FOX Sport 4K (US2)
-    "Fox.Sports.4K.us2": ["Fox.Sports.4K.us2", "FOX Sport 4K", "Fox Sports 4K"],
-    "FOX Sport 4K":      ["Fox.Sports.4K.us2", "FOX Sport 4K", "Fox Sports 4K"],
-    "Fox Sports 4K":     ["Fox.Sports.4K.us2", "FOX Sport 4K", "Fox Sports 4K"],
+    # ESPN Brasil (1-6)
+    "ESPN.br": ["ESPN.br", "ESPN.HD.br"],
+    "ESPN.HD.br": ["ESPN.br", "ESPN.HD.br"],
+    "ESPN.2.br": ["ESPN.2.br", "ESPN2.HD.br"],
+    "ESPN.3.br": ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br"],
+    "São.Paulo/SP..ESPN.3.HD.br": ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br"],
+    "ESPN.4.br": ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br"],
+    "São.Paulo/SP..ESPN.4.HD.br": ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br"],
+    "ESPN.5.br": ["ESPN.5.br"],
+    "ESPN.6.br": ["ESPN.6.br"],
 
-    # ESPN Brasile (BR1 & BR2)
-    "ESPN.br":                     ["ESPN.br", "ESPN HD", "ESPN"],
-    "ESPN HD":                     ["ESPN.br", "ESPN HD", "ESPN"],
-    "ESPN.2.br":                   ["ESPN.2.br", "ESPN 2 HD", "ESPN 2"],
-    "ESPN 2 HD":                   ["ESPN.2.br", "ESPN 2 HD", "ESPN 2"],
-    "ESPN.3.br":                   ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br", "ESPN 3 HD", "ESPN 3"],
-    "São.Paulo/SP..ESPN.3.HD.br":  ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br", "ESPN 3 HD", "ESPN 3"],
-    "ESPN 3 HD":                   ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br", "ESPN 3 HD", "ESPN 3"],
-    "ESPN.4.br":                   ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br", "São.Paulo/SP..Espn.4.br", "ESPN 4 HD", "ESPN 4"],
-    "São.Paulo/SP..ESPN.4.HD.br":  ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br", "São.Paulo/SP..Espn.4.br", "ESPN 4 HD", "ESPN 4"],
-    "São.Paulo/SP..Espn.4.br":     ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br", "São.Paulo/SP..Espn.4.br", "ESPN 4 HD", "ESPN 4"],
-    "ESPN 4 HD":                   ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br", "São.Paulo/SP..Espn.4.br", "ESPN 4 HD", "ESPN 4"],
-    "ESPN.5.br":                   ["ESPN.5.br", "ESPN 5 HD", "ESPN 5"],
-    "ESPN 5 HD":                   ["ESPN.5.br", "ESPN 5 HD", "ESPN 5"],
-    "ESPN.6.br":                   ["ESPN.6.br", "ESPN 6 HD", "ESPN 6"],
-    "ESPN 6 HD":                   ["ESPN.6.br", "ESPN 6 HD", "ESPN 6"],
+    # Germania - Sky Sport (1-10)
+    "Sky.Sport.1.de": ["Sky.Sport.1.de"],
+    "Sky.Sport.2.de": ["Sky.Sport.2.de"],
+    "Sky.Sport.3.de": ["Sky.Sport.3.de"],
+    "Sky.Sport.4.de": ["Sky.Sport.4.de"],
+    "Sky.Sport.5.de": ["Sky.Sport.5.de"],
+    "Sky.Sport.6.de": ["Sky.Sport.6.de"],
+    "Sky.Sport.7.de": ["Sky.Sport.7.de"],
+    "Sky.Sport.8.de": ["Sky.Sport.8.de"],
+    "Sky.Sport.9.de": ["Sky.Sport.9.de"],
+    "Sky.Sport.10.de": ["Sky.Sport.10.de"],
 
-    # Sky Sport Germania (DE1)
-    "Sky.Sport.1.de":               ["Sky.Sport.1.de", "Sky Sport 1 HD", "Sky Sport 1"],
-    "Sky Sport 1 HD":               ["Sky.Sport.1.de", "Sky Sport 1 HD", "Sky Sport 1"],
-    "Sky.Sport.2.de":               ["Sky.Sport.2.de", "Sky Sport 2 HD", "Sky Sport 2"],
-    "Sky Sport 2 HD":               ["Sky.Sport.2.de", "Sky Sport 2 HD", "Sky Sport 2"],
-    "Sky.Sport.3.de":               ["Sky.Sport.3.de", "Sky Sport 3 HD", "Sky Sport 3"],
-    "Sky Sport 3 HD":               ["Sky.Sport.3.de", "Sky Sport 3 HD", "Sky Sport 3"],
-    "Sky.Sport.4.de":               ["Sky.Sport.4.de", "Sky Sport 4 HD", "Sky Sport 4"],
-    "Sky Sport 4 HD":               ["Sky.Sport.4.de", "Sky Sport 4 HD", "Sky Sport 4"],
-    "Sky.Sport.5.de":               ["Sky.Sport.5.de", "Sky Sport 5 HD", "Sky Sport 5"],
-    "Sky Sport 5 HD":               ["Sky.Sport.5.de", "Sky Sport 5 HD", "Sky Sport 5"],
-    "Sky.Sport.6.de":               ["Sky.Sport.6.de", "Sky Sport 6 HD", "Sky Sport 6"],
-    "Sky Sport 6 HD":               ["Sky.Sport.6.de", "Sky Sport 6 HD", "Sky Sport 6"],
-    "Sky.Sport.7.de":               ["Sky.Sport.7.de", "Sky Sport 7 HD", "Sky Sport 7"],
-    "Sky Sport 7 HD":               ["Sky.Sport.7.de", "Sky Sport 7 HD", "Sky Sport 7"],
-    "Sky.Sport.8.de":               ["Sky.Sport.8.de", "Sky Sport 8 HD", "Sky Sport 8"],
-    "Sky Sport 8 HD":               ["Sky.Sport.8.de", "Sky Sport 8 HD", "Sky Sport 8"],
-    "Sky.Sport.9.de":               ["Sky.Sport.9.de", "Sky Sport 9 HD", "Sky Sport 9"],
-    "Sky Sport 9 HD":               ["Sky.Sport.9.de", "Sky Sport 9 HD", "Sky Sport 9"],
-    "Sky.Sport.10.de":              ["Sky.Sport.10.de", "Sky Sport 10 HD", "Sky Sport 10"],
-    "Sky Sport 10 HD":              ["Sky.Sport.10.de", "Sky Sport 10 HD", "Sky Sport 10"],
+    # Germania - Sky Sport Austria (1-8)
+    "Sky.Sport.Austria.1.HD.de": ["Sky.Sport.Austria.1.HD.de", "Sky.Sport.Austria.1.de"],
+    "Sky.Sport.Austria.2.HD.de": ["Sky.Sport.Austria.2.HD.de", "Sky.Sport.Austria.2.de"],
+    "Sky.Sport.Austria.3.HD.de": ["Sky.Sport.Austria.3.HD.de", "Sky.Sport.Austria.3.de"],
+    "Sky.Sport.Austria.4.HD.de": ["Sky.Sport.Austria.4.HD.de", "Sky.Sport.Austria.4.de"],
+    "Sky.Sport.Austria.5.HD.de": ["Sky.Sport.Austria.5.HD.de", "Sky.Sport.Austria.5.de"],
+    "Sky.Sport.Austria.6.HD.de": ["Sky.Sport.Austria.6.HD.de", "Sky.Sport.Austria.6.de"],
+    "Sky.Sport.Austria.7.HD.de": ["Sky.Sport.Austria.7.HD.de", "Sky.Sport.Austria.7.de"],
+    "Sky.Sport.Austria.8.HD.de": ["Sky.Sport.Austria.8.HD.de", "Sky.Sport.Austria.8.de"],
 
-    # Sky Sport Tematici Germania (DE1)
-    "Sky.Sport.F1.de":              ["Sky.Sport.F1.de", "Sky Sport F1 HD", "Sky Sport F1"],
-    "Sky Sport F1 HD":              ["Sky.Sport.F1.de", "Sky Sport F1 HD", "Sky Sport F1"],
-    "Sky.Sport.Premier.League.de":  ["Sky.Sport.Premier.League.de", "Sky Sport Premiere League HD", "Sky Sport Premier League HD", "Sky Sport Premier League"],
-    "Sky Sport Premier League HD":  ["Sky.Sport.Premier.League.de", "Sky Sport Premiere League HD", "Sky Sport Premier League HD", "Sky Sport Premier League"],
-    "Sky Sport Premiere League HD": ["Sky.Sport.Premier.League.de", "Sky Sport Premiere League HD", "Sky Sport Premier League HD", "Sky Sport Premier League"],
-    "Sky.Sport.Mix.de":             ["Sky.Sport.Mix.de", "Sky Sport Mix HD", "Sky Sport Mix"],
-    "Sky Sport Mix HD":             ["Sky.Sport.Mix.de", "Sky Sport Mix HD", "Sky Sport Mix"],
-    "Sky.Sport.Tennis.de":          ["Sky.Sport.Tennis.de", "Sky Sport Tennis HD", "Sky Sport Tennis"],
-    "Sky Sport Tennis HD":          ["Sky.Sport.Tennis.de", "Sky Sport Tennis HD", "Sky Sport Tennis"],
+    # Germania - Sky Sport Tematici
+    "Sky.Sport.News.de": ["Sky.Sport.News.de"],
+    "Sky.Sport.F1.de": ["Sky.Sport.F1.de"],
+    "Sky.Sport.Premier.League.de": ["Sky.Sport.Premier.League.de"],
+    "Sky.Sport.Mix.de": ["Sky.Sport.Mix.de"],
+    "Sky.Sport.Tennis.de": ["Sky.Sport.Tennis.de"],
 
-    # Sky Sport Austria (DE1)
-    "Sky.Sport.Austria.1.HD.de":    ["Sky.Sport.Austria.1.HD.de", "Sky.Sport.Austria.de", "Sky Sport Austria 1 HD", "Sky Sport Austria 1"],
-    "Sky.Sport.Austria.de":         ["Sky.Sport.Austria.1.HD.de", "Sky.Sport.Austria.de", "Sky Sport Austria 1 HD", "Sky Sport Austria 1"],
-    "Sky Sport Austria 1 HD":       ["Sky.Sport.Austria.1.HD.de", "Sky.Sport.Austria.de", "Sky Sport Austria 1 HD", "Sky Sport Austria 1"],
-    "Sky.Sport.Austria.2.HD.de":    ["Sky.Sport.Austria.2.HD.de", "Sky Sport Austria 2 HD", "Sky Sport Austria 2"],
-    "Sky Sport Austria 2 HD":       ["Sky.Sport.Austria.2.HD.de", "Sky Sport Austria 2 HD", "Sky Sport Austria 2"],
-    "Sky.Sport.Austria.3.HD.de":    ["Sky.Sport.Austria.3.HD.de", "Sky Sport Austria 3 HD", "Sky Sport Austria 3"],
-    "Sky Sport Austria 3 HD":       ["Sky.Sport.Austria.3.HD.de", "Sky Sport Austria 3 HD", "Sky Sport Austria 3"],
-    "Sky.Sport.Austria.4.HD.de":    ["Sky.Sport.Austria.4.HD.de", "Sky Sport Austria 4 HD", "Sky Sport Austria 4"],
-    "Sky Sport Austria 4 HD":       ["Sky.Sport.Austria.4.HD.de", "Sky Sport Austria 4 HD", "Sky Sport Austria 4"],
-    "Sky.Sport.Austria.5.HD.de":    ["Sky.Sport.Austria.5.HD.de", "Sky Sport Austria 5 HD", "Sky Sport Austria 5"],
-    "Sky Sport Austria 5 HD":       ["Sky.Sport.Austria.5.HD.de", "Sky Sport Austria 5 HD", "Sky Sport Austria 5"],
-    "Sky.Sport.Austria.6.HD.de":    ["Sky.Sport.Austria.6.HD.de", "Sky Sport Austria 6 HD", "Sky Sport Austria 6"],
-    "Sky Sport Austria 6 HD":       ["Sky.Sport.Austria.6.HD.de", "Sky Sport Austria 6 HD", "Sky Sport Austria 6"],
-    "Sky.Sport.Austria.7.HD.de":    ["Sky.Sport.Austria.7.HD.de", "Sky Sport Austria 7 HD", "Sky Sport Austria 7"],
-    "Sky Sport Austria 7 HD":       ["Sky.Sport.Austria.7.HD.de", "Sky Sport Austria 7 HD", "Sky Sport Austria 7"],
-    "Sky.Sport.Austria.8.HD.de":    ["Sky.Sport.Austria.8.HD.de", "Sky Sport Austria 8 HD", "Sky Sport Austria 8"],
-    "Sky Sport Austria 8 HD":       ["Sky.Sport.Austria.8.HD.de", "Sky Sport Austria 8 HD", "Sky Sport Austria 8"],
-
-    # CANAL+ Sport 1-8 (CZ1 e PL1)
-    "Canal+.Sport.cz":              ["Canal+.Sport.cz", "Canal.plus.Sport.CZ.cz", "CANAL+.Sport.HD.pl", "CANAL+ Sport 1", "Canal+ Sport"],
-    "Canal.plus.Sport.CZ.cz":       ["Canal+.Sport.cz", "Canal.plus.Sport.CZ.cz", "CANAL+.Sport.HD.pl", "CANAL+ Sport 1", "Canal+ Sport"],
-    "CANAL+.Sport.HD.pl":           ["Canal+.Sport.cz", "Canal.plus.Sport.CZ.cz", "CANAL+.Sport.HD.pl", "CANAL+ Sport 1", "Canal+ Sport"],
-    "CANAL+ Sport 1":               ["Canal+.Sport.cz", "Canal.plus.Sport.CZ.cz", "CANAL+.Sport.HD.pl", "CANAL+ Sport 1", "Canal+ Sport"],
-    "Canal+.Sport.2.cz":            ["Canal+.Sport.2.cz", "Canal.plus.Sport.2.cz", "CANAL+.Sport.2.HD.pl", "CANAL+ Sport 2"],
-    "Canal.plus.Sport.2.cz":        ["Canal+.Sport.2.cz", "Canal.plus.Sport.2.cz", "CANAL+.Sport.2.HD.pl", "CANAL+ Sport 2"],
-    "CANAL+.Sport.2.HD.pl":         ["Canal+.Sport.2.cz", "Canal.plus.Sport.2.cz", "CANAL+.Sport.2.HD.pl", "CANAL+ Sport 2"],
-    "CANAL+ Sport 2":               ["Canal+.Sport.2.cz", "Canal.plus.Sport.2.cz", "CANAL+.Sport.2.HD.pl", "CANAL+ Sport 2"],
-    "Canal+.Sport.3.cz":            ["Canal+.Sport.3.cz", "Canal.plus.Sport.3.cz", "CANAL+.Sport.3.HD.pl", "CANAL+ Sport 3"],
-    "Canal.plus.Sport.3.cz":        ["Canal+.Sport.3.cz", "Canal.plus.Sport.3.cz", "CANAL+.Sport.3.HD.pl", "CANAL+ Sport 3"],
-    "CANAL+.Sport.3.HD.pl":         ["Canal+.Sport.3.cz", "Canal.plus.Sport.3.cz", "CANAL+.Sport.3.HD.pl", "CANAL+ Sport 3"],
-    "CANAL+ Sport 3":               ["Canal+.Sport.3.cz", "Canal.plus.Sport.3.cz", "CANAL+.Sport.3.HD.pl", "CANAL+ Sport 3"],
-    "Canal+.Sport.4.cz":            ["Canal+.Sport.4.cz", "Canal.plus.Sport.4.cz", "CANAL+.Sport.4.HD.pl", "CANAL+ Sport 4"],
-    "Canal.plus.Sport.4.cz":        ["Canal+.Sport.4.cz", "Canal.plus.Sport.4.cz", "CANAL+.Sport.4.HD.pl", "CANAL+ Sport 4"],
-    "CANAL+.Sport.4.HD.pl":         ["Canal+.Sport.4.cz", "Canal.plus.Sport.4.cz", "CANAL+.Sport.4.HD.pl", "CANAL+ Sport 4"],
-    "CANAL+ Sport 4":               ["Canal+.Sport.4.cz", "Canal.plus.Sport.4.cz", "CANAL+.Sport.4.HD.pl", "CANAL+ Sport 4"],
-    "Canal+.Sport.5.cz":            ["Canal+.Sport.5.cz", "Canal.plus.Sport.5.cz", "CANAL+.Sport.5.HD.pl", "CANAL+ Sport 5"],
-    "Canal.plus.Sport.5.cz":        ["Canal+.Sport.5.cz", "Canal.plus.Sport.5.cz", "CANAL+.Sport.5.HD.pl", "CANAL+ Sport 5"],
-    "CANAL+.Sport.5.HD.pl":         ["Canal+.Sport.5.cz", "Canal.plus.Sport.5.cz", "CANAL+.Sport.5.HD.pl", "CANAL+ Sport 5"],
-    "CANAL+ Sport 5":               ["Canal+.Sport.5.cz", "Canal.plus.Sport.5.cz", "CANAL+.Sport.5.HD.pl", "CANAL+ Sport 5"],
-    "Canal+.Sport.6.cz":            ["Canal+.Sport.6.cz", "Canal.plus.Sport.6.cz", "CANAL+ Sport 6"],
-    "Canal.plus.Sport.6.cz":        ["Canal+.Sport.6.cz", "Canal.plus.Sport.6.cz", "CANAL+ Sport 6"],
-    "CANAL+ Sport 6":               ["Canal+.Sport.6.cz", "Canal.plus.Sport.6.cz", "CANAL+ Sport 6"],
-    "Canal+.Sport.7.cz":            ["Canal+.Sport.7.cz", "CANAL+ Sport 7"],
-    "CANAL+ Sport 7":               ["Canal+.Sport.7.cz", "CANAL+ Sport 7"],
-    "Canal+.Sport.8.cz":            ["Canal+.Sport.8.cz", "CANAL+ Sport 8"],
-    "CANAL+ Sport 8":               ["Canal+.Sport.8.cz", "CANAL+ Sport 8"],
+    # CANAL+ Sport (CZ / PL)
+    "Canal+.Sport.cz": ["Canal+.Sport.cz", "Canal+.Sport.HD.pl"],
+    "Canal+.Sport.HD.pl": ["Canal+.Sport.cz", "Canal+.Sport.HD.pl"],
+    "Canal+.Sport.2.cz": ["Canal+.Sport.2.cz", "Canal+.Sport.2.HD.pl"],
+    "Canal+.Sport.2.HD.pl": ["Canal+.Sport.2.cz", "Canal+.Sport.2.HD.pl"],
+    "Canal+.Sport.3.cz": ["Canal+.Sport.3.cz", "Canal+.Sport.3.HD.pl"],
+    "Canal+.Sport.3.HD.pl": ["Canal+.Sport.3.cz", "Canal+.Sport.3.HD.pl"],
+    "Canal+.Sport.4.cz": ["Canal+.Sport.4.cz", "Canal+.Sport.4.HD.pl"],
+    "Canal+.Sport.4.HD.pl": ["Canal+.Sport.4.cz", "Canal+.Sport.4.HD.pl"],
+    "Canal+.Sport.5.cz": ["Canal+.Sport.5.cz", "Canal+.Sport.5.HD.pl"],
+    "Canal+.Sport.5.HD.pl": ["Canal+.Sport.5.cz", "Canal+.Sport.5.HD.pl"],
+    "Canal+.Sport.6.cz": ["Canal+.Sport.6.cz"],
+    "Canal+.Sport.7.cz": ["Canal+.Sport.7.cz"],
+    "Canal+.Sport.8.cz": ["Canal+.Sport.8.cz"],
 
     # Polonia (Eleven Sports)
     "Eleven.Sports.1.HD.pl": ["Eleven.Sports.1.HD.pl"],
@@ -250,151 +212,101 @@ ID_MAPPING = {
     "eleven-sport5-pt": ["eleven-sport5-pt", "DAZN.5.pt"],
     "DAZN.6.pt": ["eleven-sport6-pt", "DAZN.6.pt"],
     "eleven-sport6-pt": ["eleven-sport6-pt", "DAZN.6.pt"],
-
-    # Croazia (Arena Sport)
-    "Arena.Sport.1.HD.hr": ["Arena.Sport.1.HD.hr"],
-    "Arena.Sport.2.HD.hr": ["Arena.Sport.2.HD.hr"],
-    "Arena.Sport.3.HD.hr": ["Arena.Sport.3.HD.hr"],
-    "Arena.Sport.4.HD.hr": ["Arena.Sport.4.HD.hr"],
-    "Arena.Sport.5.HD.hr": ["Arena.Sport.5.HD.hr"],
-    "Arena.Sport.6.HD.hr": ["Arena.Sport.6.HD.hr"],
-    "Arena.Sport.7.HD.hr": ["Arena.Sport.7.HD.hr"],
-    "Arena.Sport.8.HD.hr": ["Arena.Sport.8.HD.hr"],
-    "Arena.Sport.9.HD.hr": ["Arena.Sport.9.HD.hr"],
-    "Arena.Sport.10.HD.hr": ["Arena.Sport.10.HD.hr"],
-
-    # Filippine (SPOTV)
-    "SPOTV.HD.ph": ["Spotv Hd.ph", "SPOTV.HD.ph"],
-    "SPOTV.ph": ["Spotv Hd.ph", "SPOTV.ph"],
-    "Spotv Hd.ph": ["Spotv Hd.ph", "SPOTV.HD.ph"],
-    "SPOTV.2.HD.ph": ["Spotv Hd2.ph", "SPOTV.2.HD.ph"],
-    "SPOTV..2.ph": ["Spotv Hd2.ph", "SPOTV..2.ph"],
-    "Spotv Hd2.ph": ["Spotv Hd2.ph", "SPOTV.2.HD.ph"],
-
-    # UK / Irlanda (TNT Sports)
-    "TNT.Sports.1.HD.ie": ["TNT.Sports.1.HD.ie"],
-    "TNT.Sports.2.HD.ie": ["TNT.Sports.2.HD.ie"],
-    "TNT.Sports.3.HD.ie": ["TNT.Sports.3.HD.ie"],
-    "TNT.Sports.4.HD.ie": ["TNT.Sports.4.HD.ie"],
 }
 
-# Lookup insensibile al maiuscolo/minuscolo
-LOWER_ID_MAP = {k.lower(): v for k, v in ID_MAPPING.items()}
-OUTPUT_FILE = "epg.xml.gz"
-HTTP_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-}
+# Insieme univoco di tutti gli ID sorgente che ci interessano
+SOURCE_IDS_TO_TRACK = set(ID_MAPPING.keys())
 
-def download_to_temp(url: str, dest_path: str) -> bool:
-    try:
-        with requests.get(url, headers=HTTP_HEADERS, stream=True, timeout=90) as r:
-            r.raise_for_status()
-            with open(dest_path, "wb") as f:
-                for chunk in r.iter_content(chunk_size=1024 * 1024):
-                    if chunk:
-                        f.write(chunk)
-        return True
-    except Exception as e:
-        print(f"  [WARN] Errore scaricamento da {url}: {e}")
-        return False
+def download_and_extract(url, temp_dir):
+    """Scarica il file EPG .gz e lo decomprime in locale restituendo il path del file XML."""
+    filename = url.split("/")[-1]
+    gz_path = os.path.join(temp_dir, filename)
+    xml_path = os.path.join(temp_dir, filename.replace(".gz", ""))
 
-def open_epg_stream(file_path: str):
-    with open(file_path, "rb") as f:
-        magic = f.read(2)
-    if magic == b"\x1f\x8b":
-        return gzip.open(file_path, "rb")
-    return open(file_path, "rb")
+    print(f"📥 Download in corso: {url} ...")
+    resp = requests.get(url, stream=True, timeout=60)
+    resp.raise_for_status()
 
-def resolve_target_ids(channel_id: str):
-    if not channel_id:
-        return []
-    if channel_id in ID_MAPPING:
-        return ID_MAPPING[channel_id]
-    low = channel_id.lower()
-    return LOWER_ID_MAP.get(low, [])
+    with open(gz_path, "wb") as f_out:
+        for chunk in resp.iter_content(chunk_size=1024 * 1024):
+            if chunk:
+                f_out.write(chunk)
 
-def main():
-    temp_dir = tempfile.mkdtemp(prefix="epg_merge_")
-    merged_channels = {}
-    seen_programmes = set()  # Deduplicazione: (channel_id, start_time)
+    print(f"📦 Decompressione {filename} ...")
+    with gzip.open(gz_path, "rb") as f_in, open(xml_path, "wb") as f_out:
+        shutil.copyfileobj(f_in, f_out)
+
+    return xml_path
+
+def build_merged_epg(output_path="epg.xml"):
+    """Estrae e mappa solo i canali e programmi di interesse da tutte le sorgenti."""
+    temp_dir = tempfile.mkdtemp(prefix="epg_build_")
+    
+    # Root del nuovo XMLTV unificato
+    root_out = ET.Element("tv", {
+        "generator-info-name": "SuperTeo EPG Merger",
+        "generator-info-url": "https://github.com/superteo"
+    })
+
+    written_channels = set()
     total_programmes = 0
 
     try:
-        temp_prog_path = os.path.join(temp_dir, "programmes.tmp")
-        print("=== INIZIO ELABORAZIONE SORGENTI EPG ===")
+        for url in EPG_URLS:
+            try:
+                xml_path = download_and_extract(url, temp_dir)
+            except Exception as e:
+                print(f"⚠️ Errore durante il download da {url}: {e}")
+                continue
 
-        with open(temp_prog_path, "wb") as prog_out:
-            for idx, url in enumerate(EPG_URLS, 1):
-                print(f"[{idx}/{len(EPG_URLS)}] Download {url} ...")
-                local_archive = os.path.join(temp_dir, f"source_{idx}.tmp")
+            print(f"🔍 Parsing di {os.path.basename(xml_path)} ...")
+            context = ET.iterparse(xml_path, events=("end",))
 
-                if not download_to_temp(url, local_archive):
-                    continue
+            for event, elem in context:
+                # 1. Parsing nodi <channel>
+                if elem.tag == "channel":
+                    chan_id = elem.attrib.get("id")
+                    if chan_id in SOURCE_IDS_TO_TRACK:
+                        target_ids = ID_MAPPING.get(chan_id, [chan_id])
+                        for t_id in target_ids:
+                            if t_id not in written_channels:
+                                new_chan = ET.SubElement(root_out, "channel", {"id": t_id})
+                                for child in elem:
+                                    new_chan.append(child)
+                                written_channels.add(t_id)
+                    elem.clear()
 
-                try:
-                    with open_epg_stream(local_archive) as stream:
-                        context = ET.iterparse(stream, events=("start", "end"))
-                        _, root = next(context)
+                # 2. Parsing nodi <programme>
+                elif elem.tag == "programme":
+                    chan_id = elem.attrib.get("channel")
+                    if chan_id in SOURCE_IDS_TO_TRACK:
+                        target_ids = ID_MAPPING.get(chan_id, [chan_id])
+                        for t_id in target_ids:
+                            new_prog = ET.SubElement(root_out, "programme", {
+                                "start": elem.attrib.get("start", ""),
+                                "stop": elem.attrib.get("stop", ""),
+                                "channel": t_id
+                            })
+                            for child in elem:
+                                new_prog.append(child)
+                            total_programmes += 1
+                    elem.clear()
 
-                        for event, elem in context:
-                            if event == "end" and elem.tag == "channel":
-                                c_id = elem.get("id")
-                                target_ids = resolve_target_ids(c_id)
-                                if target_ids:
-                                    for tid in target_ids:
-                                        if tid not in merged_channels:
-                                            new_ch = ET.Element("channel", id=tid)
-                                            for child in elem:
-                                                new_ch.append(child)
-                                            merged_channels[tid] = ET.tostring(new_ch, encoding="utf-8")
-                                elem.clear()
-                                root.clear()
+            # Rimozione XML temporaneo per non saturare il disco
+            if os.path.exists(xml_path):
+                os.remove(xml_path)
 
-                            elif event == "end" and elem.tag == "programme":
-                                p_chan = elem.get("channel")
-                                p_start = elem.get("start")
-                                target_ids = resolve_target_ids(p_chan)
-                                
-                                if target_ids and p_start:
-                                    for tid in target_ids:
-                                        dedup_key = (tid, p_start)
-                                        # Scrive il programma solo se non è già stato inserito da un'altra sorgente
-                                        if dedup_key not in seen_programmes:
-                                            seen_programmes.add(dedup_key)
-                                            elem.set("channel", tid)
-                                            prog_out.write(b"  " + ET.tostring(elem, encoding="utf-8") + b"\n")
-                                            total_programmes += 1
-                                elem.clear()
-                                root.clear()
+        # Salvataggio del file finale compresso con gzip
+        out_gz = output_path if output_path.endswith(".gz") else f"{output_path}.gz"
+        print(f"💾 Scrittura file finale compresso: {out_gz} ...")
+        xml_bytes = ET.tostring(root_out, encoding="utf-8", method="xml")
+        with gzip.open(out_gz, "wb") as f_gz:
+            f_gz.write(xml_bytes)
 
-                except Exception as e:
-                    print(f"  [ERROR] Parsing fallito per {url}: {e}")
-
-                if os.path.exists(local_archive):
-                    os.remove(local_archive)
-
-        print(f"\nCanali unici configurati: {len(merged_channels)} | Programmi estratti: {total_programmes}")
-
-        # Generazione archivio XML compresso
-        print(f"Compressione in {OUTPUT_FILE} (livello 9)...")
-        with gzip.open(OUTPUT_FILE, "wb", compresslevel=9) as gz_out:
-            gz_out.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
-            gz_out.write(b'<!DOCTYPE tv SYSTEM "xmltv.dtd">\n')
-            gz_out.write(b'<tv generator-info-name="Custom EPG Merger">\n')
-
-            for ch_bytes in merged_channels.values():
-                gz_out.write(b"  " + ch_bytes + b"\n")
-
-            with open(temp_prog_path, "rb") as prog_in:
-                shutil.copyfileobj(prog_in, gz_out)
-
-            gz_out.write(b"</tv>\n")
-
-        size_kb = os.path.getsize(OUTPUT_FILE) / 1024
-        print(f"[OK] {OUTPUT_FILE} completato con successo ({size_kb:.1f} KB)!")
+        print(f"✅ EPG Generata con Successo! Canali unici: {len(written_channels)}, Programmi: {total_programmes}")
 
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
 if __name__ == "__main__":
-    main()
+    build_merged_epg("epg.xml.gz")
