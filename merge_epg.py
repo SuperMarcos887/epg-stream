@@ -5,10 +5,11 @@ import tempfile
 import xml.etree.ElementTree as ET
 import requests
 
-# 1. Le 12 sorgenti EPG complete
+# 1. Sorgenti EPG complete (con aggiunta di Germania DE1 e Brasile BR1, BR2)
 EPG_URLS = [
     "http://epg-guide.com/wltv.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_IT1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_DE1.xml.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_PL1.xml.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_CZ1.xml.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_CH1.xml.gz",
@@ -19,6 +20,8 @@ EPG_URLS = [
     "https://epgshare01.online/epgshare01/epg_ripper_IE1.xml.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_MX1.xml.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_PH1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_BR1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_BR2.xml.gz",
 ]
 
 # 2. Mappatura completa e bidirezionale (qualsiasi variante -> lista target da generare)
@@ -63,35 +66,27 @@ ID_MAPPING = {
     "Zona.DAZN.it": ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
     "zonadazn.it":  ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
 
-    # Sky Calcio / Canali Multi-Evento (con gestione doppio punto IT1 e punto singolo)
+    # Sky Calcio / Canali Multi-Evento
     "Sky.Sport..251.it": ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
     "Sky.Sport.251.it":  ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
     "SkyCalcio1.it":     ["Sky.Sport..251.it", "Sky.Sport.251.it", "SkyCalcio1.it"],
-
     "Sky.Sport..252.it": ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
     "Sky.Sport.252.it":  ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
     "SkyCalcio2.it":     ["Sky.Sport..252.it", "Sky.Sport.252.it", "SkyCalcio2.it"],
-
     "Sky.Sport..253.it": ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
     "Sky.Sport.253.it":  ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
     "SkyCalcio3.it":     ["Sky.Sport..253.it", "Sky.Sport.253.it", "SkyCalcio3.it"],
-
     "Sky.Sport..254.it": ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
     "Sky.Sport.254.it":  ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
     "SkyCalcio4.it":     ["Sky.Sport..254.it", "Sky.Sport.254.it", "SkyCalcio4.it"],
-
     "Sky.Sport..255.it": ["Sky.Sport..255.it", "Sky.Sport.255.it"],
     "Sky.Sport.255.it":  ["Sky.Sport..255.it", "Sky.Sport.255.it"],
-
     "Sky.Sport..256.it": ["Sky.Sport..256.it", "Sky.Sport.256.it"],
     "Sky.Sport.256.it":  ["Sky.Sport..256.it", "Sky.Sport.256.it"],
-
     "Sky.Sport..257.it": ["Sky.Sport..257.it", "Sky.Sport.257.it"],
     "Sky.Sport.257.it":  ["Sky.Sport..257.it", "Sky.Sport.257.it"],
-
     "Sky.Sport..258.it": ["Sky.Sport..258.it", "Sky.Sport.258.it"],
     "Sky.Sport.258.it":  ["Sky.Sport..258.it", "Sky.Sport.258.it"],
-
     "Sky.Sport..259.it": ["Sky.Sport..259.it", "Sky.Sport.259.it"],
     "Sky.Sport.259.it":  ["Sky.Sport..259.it", "Sky.Sport.259.it"],
 
@@ -124,6 +119,109 @@ ID_MAPPING = {
     "ESPN.3.mx": ["ESPN.3.mx"],
     "ESPN.4.mx": ["ESPN.4.mx"],
     "ESPN.5.mx": ["ESPN.4.mx", "ESPN.5.mx"],
+
+    # FOX Sport 4K (US2)
+    "Fox.Sports.4K.us2": ["Fox.Sports.4K.us2", "FOX Sport 4K", "Fox Sports 4K"],
+    "FOX Sport 4K":      ["Fox.Sports.4K.us2", "FOX Sport 4K", "Fox Sports 4K"],
+    "Fox Sports 4K":     ["Fox.Sports.4K.us2", "FOX Sport 4K", "Fox Sports 4K"],
+
+    # ESPN Brasile (BR1 & BR2)
+    "ESPN.br":                     ["ESPN.br", "ESPN HD", "ESPN"],
+    "ESPN HD":                     ["ESPN.br", "ESPN HD", "ESPN"],
+    "ESPN.2.br":                   ["ESPN.2.br", "ESPN 2 HD", "ESPN 2"],
+    "ESPN 2 HD":                   ["ESPN.2.br", "ESPN 2 HD", "ESPN 2"],
+    "ESPN.3.br":                   ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br", "ESPN 3 HD", "ESPN 3"],
+    "São.Paulo/SP..ESPN.3.HD.br":  ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br", "ESPN 3 HD", "ESPN 3"],
+    "ESPN 3 HD":                   ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br", "ESPN 3 HD", "ESPN 3"],
+    "ESPN.4.br":                   ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br", "São.Paulo/SP..Espn.4.br", "ESPN 4 HD", "ESPN 4"],
+    "São.Paulo/SP..ESPN.4.HD.br":  ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br", "São.Paulo/SP..Espn.4.br", "ESPN 4 HD", "ESPN 4"],
+    "São.Paulo/SP..Espn.4.br":     ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br", "São.Paulo/SP..Espn.4.br", "ESPN 4 HD", "ESPN 4"],
+    "ESPN 4 HD":                   ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br", "São.Paulo/SP..Espn.4.br", "ESPN 4 HD", "ESPN 4"],
+    "ESPN.5.br":                   ["ESPN.5.br", "ESPN 5 HD", "ESPN 5"],
+    "ESPN 5 HD":                   ["ESPN.5.br", "ESPN 5 HD", "ESPN 5"],
+    "ESPN.6.br":                   ["ESPN.6.br", "ESPN 6 HD", "ESPN 6"],
+    "ESPN 6 HD":                   ["ESPN.6.br", "ESPN 6 HD", "ESPN 6"],
+
+    # Sky Sport Germania (DE1)
+    "Sky.Sport.1.de":               ["Sky.Sport.1.de", "Sky Sport 1 HD", "Sky Sport 1"],
+    "Sky Sport 1 HD":               ["Sky.Sport.1.de", "Sky Sport 1 HD", "Sky Sport 1"],
+    "Sky.Sport.2.de":               ["Sky.Sport.2.de", "Sky Sport 2 HD", "Sky Sport 2"],
+    "Sky Sport 2 HD":               ["Sky.Sport.2.de", "Sky Sport 2 HD", "Sky Sport 2"],
+    "Sky.Sport.3.de":               ["Sky.Sport.3.de", "Sky Sport 3 HD", "Sky Sport 3"],
+    "Sky Sport 3 HD":               ["Sky.Sport.3.de", "Sky Sport 3 HD", "Sky Sport 3"],
+    "Sky.Sport.4.de":               ["Sky.Sport.4.de", "Sky Sport 4 HD", "Sky Sport 4"],
+    "Sky Sport 4 HD":               ["Sky.Sport.4.de", "Sky Sport 4 HD", "Sky Sport 4"],
+    "Sky.Sport.5.de":               ["Sky.Sport.5.de", "Sky Sport 5 HD", "Sky Sport 5"],
+    "Sky Sport 5 HD":               ["Sky.Sport.5.de", "Sky Sport 5 HD", "Sky Sport 5"],
+    "Sky.Sport.6.de":               ["Sky.Sport.6.de", "Sky Sport 6 HD", "Sky Sport 6"],
+    "Sky Sport 6 HD":               ["Sky.Sport.6.de", "Sky Sport 6 HD", "Sky Sport 6"],
+    "Sky.Sport.7.de":               ["Sky.Sport.7.de", "Sky Sport 7 HD", "Sky Sport 7"],
+    "Sky Sport 7 HD":               ["Sky.Sport.7.de", "Sky Sport 7 HD", "Sky Sport 7"],
+    "Sky.Sport.8.de":               ["Sky.Sport.8.de", "Sky Sport 8 HD", "Sky Sport 8"],
+    "Sky Sport 8 HD":               ["Sky.Sport.8.de", "Sky Sport 8 HD", "Sky Sport 8"],
+    "Sky.Sport.9.de":               ["Sky.Sport.9.de", "Sky Sport 9 HD", "Sky Sport 9"],
+    "Sky Sport 9 HD":               ["Sky.Sport.9.de", "Sky Sport 9 HD", "Sky Sport 9"],
+    "Sky.Sport.10.de":              ["Sky.Sport.10.de", "Sky Sport 10 HD", "Sky Sport 10"],
+    "Sky Sport 10 HD":              ["Sky.Sport.10.de", "Sky Sport 10 HD", "Sky Sport 10"],
+
+    # Sky Sport Tematici Germania (DE1)
+    "Sky.Sport.F1.de":              ["Sky.Sport.F1.de", "Sky Sport F1 HD", "Sky Sport F1"],
+    "Sky Sport F1 HD":              ["Sky.Sport.F1.de", "Sky Sport F1 HD", "Sky Sport F1"],
+    "Sky.Sport.Premier.League.de":  ["Sky.Sport.Premier.League.de", "Sky Sport Premiere League HD", "Sky Sport Premier League HD", "Sky Sport Premier League"],
+    "Sky Sport Premier League HD":  ["Sky.Sport.Premier.League.de", "Sky Sport Premiere League HD", "Sky Sport Premier League HD", "Sky Sport Premier League"],
+    "Sky Sport Premiere League HD": ["Sky.Sport.Premier.League.de", "Sky Sport Premiere League HD", "Sky Sport Premier League HD", "Sky Sport Premier League"],
+    "Sky.Sport.Mix.de":             ["Sky.Sport.Mix.de", "Sky Sport Mix HD", "Sky Sport Mix"],
+    "Sky Sport Mix HD":             ["Sky.Sport.Mix.de", "Sky Sport Mix HD", "Sky Sport Mix"],
+    "Sky.Sport.Tennis.de":          ["Sky.Sport.Tennis.de", "Sky Sport Tennis HD", "Sky Sport Tennis"],
+    "Sky Sport Tennis HD":          ["Sky.Sport.Tennis.de", "Sky Sport Tennis HD", "Sky Sport Tennis"],
+
+    # Sky Sport Austria (DE1)
+    "Sky.Sport.Austria.1.HD.de":    ["Sky.Sport.Austria.1.HD.de", "Sky.Sport.Austria.de", "Sky Sport Austria 1 HD", "Sky Sport Austria 1"],
+    "Sky.Sport.Austria.de":         ["Sky.Sport.Austria.1.HD.de", "Sky.Sport.Austria.de", "Sky Sport Austria 1 HD", "Sky Sport Austria 1"],
+    "Sky Sport Austria 1 HD":       ["Sky.Sport.Austria.1.HD.de", "Sky.Sport.Austria.de", "Sky Sport Austria 1 HD", "Sky Sport Austria 1"],
+    "Sky.Sport.Austria.2.HD.de":    ["Sky.Sport.Austria.2.HD.de", "Sky Sport Austria 2 HD", "Sky Sport Austria 2"],
+    "Sky Sport Austria 2 HD":       ["Sky.Sport.Austria.2.HD.de", "Sky Sport Austria 2 HD", "Sky Sport Austria 2"],
+    "Sky.Sport.Austria.3.HD.de":    ["Sky.Sport.Austria.3.HD.de", "Sky Sport Austria 3 HD", "Sky Sport Austria 3"],
+    "Sky Sport Austria 3 HD":       ["Sky.Sport.Austria.3.HD.de", "Sky Sport Austria 3 HD", "Sky Sport Austria 3"],
+    "Sky.Sport.Austria.4.HD.de":    ["Sky.Sport.Austria.4.HD.de", "Sky Sport Austria 4 HD", "Sky Sport Austria 4"],
+    "Sky Sport Austria 4 HD":       ["Sky.Sport.Austria.4.HD.de", "Sky Sport Austria 4 HD", "Sky Sport Austria 4"],
+    "Sky.Sport.Austria.5.HD.de":    ["Sky.Sport.Austria.5.HD.de", "Sky Sport Austria 5 HD", "Sky Sport Austria 5"],
+    "Sky Sport Austria 5 HD":       ["Sky.Sport.Austria.5.HD.de", "Sky Sport Austria 5 HD", "Sky Sport Austria 5"],
+    "Sky.Sport.Austria.6.HD.de":    ["Sky.Sport.Austria.6.HD.de", "Sky Sport Austria 6 HD", "Sky Sport Austria 6"],
+    "Sky Sport Austria 6 HD":       ["Sky.Sport.Austria.6.HD.de", "Sky Sport Austria 6 HD", "Sky Sport Austria 6"],
+    "Sky.Sport.Austria.7.HD.de":    ["Sky.Sport.Austria.7.HD.de", "Sky Sport Austria 7 HD", "Sky Sport Austria 7"],
+    "Sky Sport Austria 7 HD":       ["Sky.Sport.Austria.7.HD.de", "Sky Sport Austria 7 HD", "Sky Sport Austria 7"],
+    "Sky.Sport.Austria.8.HD.de":    ["Sky.Sport.Austria.8.HD.de", "Sky Sport Austria 8 HD", "Sky Sport Austria 8"],
+    "Sky Sport Austria 8 HD":       ["Sky.Sport.Austria.8.HD.de", "Sky Sport Austria 8 HD", "Sky Sport Austria 8"],
+
+    # CANAL+ Sport 1-8 (CZ1 e PL1)
+    "Canal+.Sport.cz":              ["Canal+.Sport.cz", "Canal.plus.Sport.CZ.cz", "CANAL+.Sport.HD.pl", "CANAL+ Sport 1", "Canal+ Sport"],
+    "Canal.plus.Sport.CZ.cz":       ["Canal+.Sport.cz", "Canal.plus.Sport.CZ.cz", "CANAL+.Sport.HD.pl", "CANAL+ Sport 1", "Canal+ Sport"],
+    "CANAL+.Sport.HD.pl":           ["Canal+.Sport.cz", "Canal.plus.Sport.CZ.cz", "CANAL+.Sport.HD.pl", "CANAL+ Sport 1", "Canal+ Sport"],
+    "CANAL+ Sport 1":               ["Canal+.Sport.cz", "Canal.plus.Sport.CZ.cz", "CANAL+.Sport.HD.pl", "CANAL+ Sport 1", "Canal+ Sport"],
+    "Canal+.Sport.2.cz":            ["Canal+.Sport.2.cz", "Canal.plus.Sport.2.cz", "CANAL+.Sport.2.HD.pl", "CANAL+ Sport 2"],
+    "Canal.plus.Sport.2.cz":        ["Canal+.Sport.2.cz", "Canal.plus.Sport.2.cz", "CANAL+.Sport.2.HD.pl", "CANAL+ Sport 2"],
+    "CANAL+.Sport.2.HD.pl":         ["Canal+.Sport.2.cz", "Canal.plus.Sport.2.cz", "CANAL+.Sport.2.HD.pl", "CANAL+ Sport 2"],
+    "CANAL+ Sport 2":               ["Canal+.Sport.2.cz", "Canal.plus.Sport.2.cz", "CANAL+.Sport.2.HD.pl", "CANAL+ Sport 2"],
+    "Canal+.Sport.3.cz":            ["Canal+.Sport.3.cz", "Canal.plus.Sport.3.cz", "CANAL+.Sport.3.HD.pl", "CANAL+ Sport 3"],
+    "Canal.plus.Sport.3.cz":        ["Canal+.Sport.3.cz", "Canal.plus.Sport.3.cz", "CANAL+.Sport.3.HD.pl", "CANAL+ Sport 3"],
+    "CANAL+.Sport.3.HD.pl":         ["Canal+.Sport.3.cz", "Canal.plus.Sport.3.cz", "CANAL+.Sport.3.HD.pl", "CANAL+ Sport 3"],
+    "CANAL+ Sport 3":               ["Canal+.Sport.3.cz", "Canal.plus.Sport.3.cz", "CANAL+.Sport.3.HD.pl", "CANAL+ Sport 3"],
+    "Canal+.Sport.4.cz":            ["Canal+.Sport.4.cz", "Canal.plus.Sport.4.cz", "CANAL+.Sport.4.HD.pl", "CANAL+ Sport 4"],
+    "Canal.plus.Sport.4.cz":        ["Canal+.Sport.4.cz", "Canal.plus.Sport.4.cz", "CANAL+.Sport.4.HD.pl", "CANAL+ Sport 4"],
+    "CANAL+.Sport.4.HD.pl":         ["Canal+.Sport.4.cz", "Canal.plus.Sport.4.cz", "CANAL+.Sport.4.HD.pl", "CANAL+ Sport 4"],
+    "CANAL+ Sport 4":               ["Canal+.Sport.4.cz", "Canal.plus.Sport.4.cz", "CANAL+.Sport.4.HD.pl", "CANAL+ Sport 4"],
+    "Canal+.Sport.5.cz":            ["Canal+.Sport.5.cz", "Canal.plus.Sport.5.cz", "CANAL+.Sport.5.HD.pl", "CANAL+ Sport 5"],
+    "Canal.plus.Sport.5.cz":        ["Canal+.Sport.5.cz", "Canal.plus.Sport.5.cz", "CANAL+.Sport.5.HD.pl", "CANAL+ Sport 5"],
+    "CANAL+.Sport.5.HD.pl":         ["Canal+.Sport.5.cz", "Canal.plus.Sport.5.cz", "CANAL+.Sport.5.HD.pl", "CANAL+ Sport 5"],
+    "CANAL+ Sport 5":               ["Canal+.Sport.5.cz", "Canal.plus.Sport.5.cz", "CANAL+.Sport.5.HD.pl", "CANAL+ Sport 5"],
+    "Canal+.Sport.6.cz":            ["Canal+.Sport.6.cz", "Canal.plus.Sport.6.cz", "CANAL+ Sport 6"],
+    "Canal.plus.Sport.6.cz":        ["Canal+.Sport.6.cz", "Canal.plus.Sport.6.cz", "CANAL+ Sport 6"],
+    "CANAL+ Sport 6":               ["Canal+.Sport.6.cz", "Canal.plus.Sport.6.cz", "CANAL+ Sport 6"],
+    "Canal+.Sport.7.cz":            ["Canal+.Sport.7.cz", "CANAL+ Sport 7"],
+    "CANAL+ Sport 7":               ["Canal+.Sport.7.cz", "CANAL+ Sport 7"],
+    "Canal+.Sport.8.cz":            ["Canal+.Sport.8.cz", "CANAL+ Sport 8"],
+    "CANAL+ Sport 8":               ["Canal+.Sport.8.cz", "CANAL+ Sport 8"],
 
     # Polonia (Eleven Sports)
     "Eleven.Sports.1.HD.pl": ["Eleven.Sports.1.HD.pl"],
