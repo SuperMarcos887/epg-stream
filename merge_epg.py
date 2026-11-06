@@ -5,7 +5,7 @@ import tempfile
 import xml.etree.ElementTree as ET
 import requests
 
-# 1. Sorgenti EPG complete (incluse DE1 per Sky Sport Germania/Austria e BR1/BR2 per ESPN Brasile)
+# 1. Le 15 sorgenti EPG complete
 EPG_URLS = [
     "http://epg-guide.com/wltv.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_IT1.xml.gz",
@@ -17,11 +17,11 @@ EPG_URLS = [
     "https://epgshare01.online/epgshare01/epg_ripper_CH1.xml.gz",  # Svizzera (RSI)
     "https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz",  # FOX Sport 4K, CBS Golazo
     "https://epgshare01.online/epgshare01/epg_ripper_AU1.xml.gz",  # beIN Sports AU
-    "https://epgshare01.online/epgshare01/epg_ripper_HR1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_HR1.xml.gz",  # Arena Sport 1-10 HR
     "https://epgshare01.online/epgshare01/epg_ripper_PT1.xml.gz",  # Sport TV PT & DAZN PT
-    "https://epgshare01.online/epgshare01/epg_ripper_IE1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_IE1.xml.gz",  # TNT Sports 1-4 IE
     "https://epgshare01.online/epgshare01/epg_ripper_MX1.xml.gz",  # ESPN MX
-    "https://epgshare01.online/epgshare01/epg_ripper_PH1.xml.gz",
+    "https://epgshare01.online/epgshare01/epg_ripper_PH1.xml.gz",  # SPOTV PH
 ]
 
 # 2. Mappatura completa e bidirezionale (qualsiasi variante -> lista target da generare)
@@ -60,7 +60,7 @@ ID_MAPPING = {
     "Sky.Sport.MotoGP.it": ["Sky.Sport.MotoGP.it", "SkySportMotoGP.it"],
     "SkySportMotoGP.it": ["Sky.Sport.MotoGP.it", "SkySportMotoGP.it"],
 
-    # DAZN / ZONA DAZN
+    # DAZN / ZONA DAZN (con gestione del doppio suffisso DAZN.1.it.it di IT1)
     "DAZN.1.it.it": ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
     "DAZN.1.it":    ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
     "Zona.DAZN.it": ["DAZN.1.it.it", "DAZN.1.it", "Zona.DAZN.it", "zonadazn.it"],
@@ -134,6 +134,7 @@ ID_MAPPING = {
     "ESPN.br": ["ESPN.br", "ESPN.HD.br"],
     "ESPN.HD.br": ["ESPN.br", "ESPN.HD.br"],
     "ESPN.2.br": ["ESPN.2.br", "ESPN2.HD.br"],
+    "ESPN2.HD.br": ["ESPN.2.br", "ESPN2.HD.br"],
     "ESPN.3.br": ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br"],
     "São.Paulo/SP..ESPN.3.HD.br": ["ESPN.3.br", "São.Paulo/SP..ESPN.3.HD.br"],
     "ESPN.4.br": ["ESPN.4.br", "São.Paulo/SP..ESPN.4.HD.br"],
@@ -170,18 +171,34 @@ ID_MAPPING = {
     "Sky.Sport.Mix.de": ["Sky.Sport.Mix.de"],
     "Sky.Sport.Tennis.de": ["Sky.Sport.Tennis.de"],
 
-    # CANAL+ Sport (CZ / PL)
-    "Canal+.Sport.cz": ["Canal+.Sport.cz", "Canal+.Sport.HD.pl"],
-    "Canal+.Sport.HD.pl": ["Canal+.Sport.cz", "Canal+.Sport.HD.pl"],
-    "Canal+.Sport.2.cz": ["Canal+.Sport.2.cz", "Canal+.Sport.2.HD.pl"],
-    "Canal+.Sport.2.HD.pl": ["Canal+.Sport.2.cz", "Canal+.Sport.2.HD.pl"],
-    "Canal+.Sport.3.cz": ["Canal+.Sport.3.cz", "Canal+.Sport.3.HD.pl"],
-    "Canal+.Sport.3.HD.pl": ["Canal+.Sport.3.cz", "Canal+.Sport.3.HD.pl"],
-    "Canal+.Sport.4.cz": ["Canal+.Sport.4.cz", "Canal+.Sport.4.HD.pl"],
-    "Canal+.Sport.4.HD.pl": ["Canal+.Sport.4.cz", "Canal+.Sport.4.HD.pl"],
-    "Canal+.Sport.5.cz": ["Canal+.Sport.5.cz", "Canal+.Sport.5.HD.pl"],
-    "Canal+.Sport.5.HD.pl": ["Canal+.Sport.5.cz", "Canal+.Sport.5.HD.pl"],
+    # CANAL+ Sport (1-8) - Con mapping incrociato CZ e PL
+    "Canal+.Sport.cz": ["Canal+.Sport.cz", "CANAL+.Sport.HD.pl"],
+    "CANAL+.Sport.HD.pl": ["Canal+.Sport.cz", "CANAL+.Sport.HD.pl"],
+    "CANAL+.Sport.pl": ["Canal+.Sport.cz", "CANAL+.Sport.HD.pl"],
+    "Canal.plus.Sport.CZ.cz": ["Canal+.Sport.cz"],
+
+    "Canal+.Sport.2.cz": ["Canal+.Sport.2.cz", "CANAL+.Sport.2.HD.pl"],
+    "CANAL+.Sport.2.HD.pl": ["Canal+.Sport.2.cz", "CANAL+.Sport.2.HD.pl"],
+    "CANAL+.Sport.2.pl": ["Canal+.Sport.2.cz", "CANAL+.Sport.2.HD.pl"],
+    "Canal.plus.Sport.2.cz": ["Canal+.Sport.2.cz"],
+
+    "Canal+.Sport.3.cz": ["Canal+.Sport.3.cz", "CANAL+.Sport.3.HD.pl"],
+    "CANAL+.Sport.3.HD.pl": ["Canal+.Sport.3.cz", "CANAL+.Sport.3.HD.pl"],
+    "CANAL+.Sport.3.pl": ["Canal+.Sport.3.cz", "CANAL+.Sport.3.HD.pl"],
+    "Canal.plus.Sport.3.cz": ["Canal+.Sport.3.cz"],
+
+    "Canal+.Sport.4.cz": ["Canal+.Sport.4.cz", "CANAL+.Sport.4.HD.pl"],
+    "CANAL+.Sport.4.HD.pl": ["Canal+.Sport.4.cz", "CANAL+.Sport.4.HD.pl"],
+    "CANAL+.Sport.4.pl": ["Canal+.Sport.4.cz", "CANAL+.Sport.4.HD.pl"],
+    "Canal.plus.Sport.4.cz": ["Canal+.Sport.4.cz"],
+
+    "Canal+.Sport.5.cz": ["Canal+.Sport.5.cz", "CANAL+.Sport.5.HD.pl"],
+    "CANAL+.Sport.5.HD.pl": ["Canal+.Sport.5.cz", "CANAL+.Sport.5.HD.pl"],
+    "CANAL+.Sport.5.pl": ["Canal+.Sport.5.cz", "CANAL+.Sport.5.HD.pl"],
+    "Canal.plus.Sport.5.cz": ["Canal+.Sport.5.cz"],
+
     "Canal+.Sport.6.cz": ["Canal+.Sport.6.cz"],
+    "Canal.plus.Sport.6.cz": ["Canal+.Sport.6.cz"],
     "Canal+.Sport.7.cz": ["Canal+.Sport.7.cz"],
     "Canal+.Sport.8.cz": ["Canal+.Sport.8.cz"],
 
@@ -212,101 +229,155 @@ ID_MAPPING = {
     "eleven-sport5-pt": ["eleven-sport5-pt", "DAZN.5.pt"],
     "DAZN.6.pt": ["eleven-sport6-pt", "DAZN.6.pt"],
     "eleven-sport6-pt": ["eleven-sport6-pt", "DAZN.6.pt"],
+
+    # Croazia (Arena Sport)
+    "Arena.Sport.1.HD.hr": ["Arena.Sport.1.HD.hr"],
+    "Arena.Sport.2.HD.hr": ["Arena.Sport.2.HD.hr"],
+    "Arena.Sport.3.HD.hr": ["Arena.Sport.3.HD.hr"],
+    "Arena.Sport.4.HD.hr": ["Arena.Sport.4.HD.hr"],
+    "Arena.Sport.5.HD.hr": ["Arena.Sport.5.HD.hr"],
+    "Arena.Sport.6.HD.hr": ["Arena.Sport.6.HD.hr"],
+    "Arena.Sport.7.HD.hr": ["Arena.Sport.7.HD.hr"],
+    "Arena.Sport.8.HD.hr": ["Arena.Sport.8.HD.hr"],
+    "Arena.Sport.9.HD.hr": ["Arena.Sport.9.HD.hr"],
+    "Arena.Sport.10.HD.hr": ["Arena.Sport.10.HD.hr"],
+
+    # Filippine (SPOTV)
+    "SPOTV.HD.ph": ["Spotv Hd.ph", "SPOTV.HD.ph"],
+    "SPOTV.ph": ["Spotv Hd.ph", "SPOTV.ph"],
+    "Spotv Hd.ph": ["Spotv Hd.ph", "SPOTV.HD.ph"],
+    "SPOTV.2.HD.ph": ["Spotv Hd2.ph", "SPOTV.2.HD.ph"],
+    "SPOTV..2.ph": ["Spotv Hd2.ph", "SPOTV..2.ph"],
+    "Spotv Hd2.ph": ["Spotv Hd2.ph", "SPOTV.2.HD.ph"],
+
+    # UK / Irlanda (TNT Sports)
+    "TNT.Sports.1.HD.ie": ["TNT.Sports.1.HD.ie"],
+    "TNT.Sports.1.ie": ["TNT.Sports.1.HD.ie"],
+    "TNT.Sports.2.HD.ie": ["TNT.Sports.2.HD.ie"],
+    "TNT.Sports.2.ie": ["TNT.Sports.2.HD.ie"],
+    "TNT.Sports.3.HD.ie": ["TNT.Sports.3.HD.ie"],
+    "TNT.Sports.3.ie": ["TNT.Sports.3.HD.ie"],
+    "TNT.Sports.4.HD.ie": ["TNT.Sports.4.HD.ie"],
+    "TNT.Sports.4.ie": ["TNT.Sports.4.HD.ie"],
 }
 
-# Insieme univoco di tutti gli ID sorgente che ci interessano
-SOURCE_IDS_TO_TRACK = set(ID_MAPPING.keys())
+# Lookup insensibile al maiuscolo/minuscolo per matching infallibile
+LOWER_ID_MAP = {k.lower(): v for k, v in ID_MAPPING.items()}
+OUTPUT_FILE = "epg.xml.gz"
+HTTP_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+}
 
-def download_and_extract(url, temp_dir):
-    """Scarica il file EPG .gz e lo decomprime in locale restituendo il path del file XML."""
-    filename = url.split("/")[-1]
-    gz_path = os.path.join(temp_dir, filename)
-    xml_path = os.path.join(temp_dir, filename.replace(".gz", ""))
+def download_to_temp(url: str, dest_path: str) -> bool:
+    try:
+        with requests.get(url, headers=HTTP_HEADERS, stream=True, timeout=90) as r:
+            r.raise_for_status()
+            with open(dest_path, "wb") as f:
+                for chunk in r.iter_content(chunk_size=1024 * 1024):
+                    if chunk:
+                        f.write(chunk)
+        return True
+    except Exception as e:
+        print(f"  [WARN] Errore scaricamento da {url}: {e}")
+        return False
 
-    print(f"📥 Download in corso: {url} ...")
-    resp = requests.get(url, stream=True, timeout=60)
-    resp.raise_for_status()
+def open_epg_stream(file_path: str):
+    with open(file_path, "rb") as f:
+        magic = f.read(2)
+    if magic == b"\x1f\x8b":
+        return gzip.open(file_path, "rb")
+    return open(file_path, "rb")
 
-    with open(gz_path, "wb") as f_out:
-        for chunk in resp.iter_content(chunk_size=1024 * 1024):
-            if chunk:
-                f_out.write(chunk)
+def resolve_target_ids(channel_id: str):
+    if not channel_id:
+        return []
+    if channel_id in ID_MAPPING:
+        return ID_MAPPING[channel_id]
+    low = channel_id.lower()
+    return LOWER_ID_MAP.get(low, [])
 
-    print(f"📦 Decompressione {filename} ...")
-    with gzip.open(gz_path, "rb") as f_in, open(xml_path, "wb") as f_out:
-        shutil.copyfileobj(f_in, f_out)
-
-    return xml_path
-
-def build_merged_epg(output_path="epg.xml"):
-    """Estrae e mappa solo i canali e programmi di interesse da tutte le sorgenti."""
-    temp_dir = tempfile.mkdtemp(prefix="epg_build_")
-    
-    # Root del nuovo XMLTV unificato
-    root_out = ET.Element("tv", {
-        "generator-info-name": "SuperTeo EPG Merger",
-        "generator-info-url": "https://github.com/superteo"
-    })
-
-    written_channels = set()
+def main():
+    temp_dir = tempfile.mkdtemp(prefix="epg_merge_")
+    merged_channels = {}
+    seen_programmes = set()  # Deduplicazione: (channel_id, start_time)
     total_programmes = 0
 
     try:
-        for url in EPG_URLS:
-            try:
-                xml_path = download_and_extract(url, temp_dir)
-            except Exception as e:
-                print(f"⚠️ Errore durante il download da {url}: {e}")
-                continue
+        temp_prog_path = os.path.join(temp_dir, "programmes.tmp")
+        print("=== INIZIO ELABORAZIONE SORGENTI EPG ===")
 
-            print(f"🔍 Parsing di {os.path.basename(xml_path)} ...")
-            context = ET.iterparse(xml_path, events=("end",))
+        with open(temp_prog_path, "wb") as prog_out:
+            for idx, url in enumerate(EPG_URLS, 1):
+                print(f"[{idx}/{len(EPG_URLS)}] Download {url} ...")
+                local_archive = os.path.join(temp_dir, f"source_{idx}.tmp")
 
-            for event, elem in context:
-                # 1. Parsing nodi <channel>
-                if elem.tag == "channel":
-                    chan_id = elem.attrib.get("id")
-                    if chan_id in SOURCE_IDS_TO_TRACK:
-                        target_ids = ID_MAPPING.get(chan_id, [chan_id])
-                        for t_id in target_ids:
-                            if t_id not in written_channels:
-                                new_chan = ET.SubElement(root_out, "channel", {"id": t_id})
-                                for child in elem:
-                                    new_chan.append(child)
-                                written_channels.add(t_id)
-                    elem.clear()
+                if not download_to_temp(url, local_archive):
+                    continue
 
-                # 2. Parsing nodi <programme>
-                elif elem.tag == "programme":
-                    chan_id = elem.attrib.get("channel")
-                    if chan_id in SOURCE_IDS_TO_TRACK:
-                        target_ids = ID_MAPPING.get(chan_id, [chan_id])
-                        for t_id in target_ids:
-                            new_prog = ET.SubElement(root_out, "programme", {
-                                "start": elem.attrib.get("start", ""),
-                                "stop": elem.attrib.get("stop", ""),
-                                "channel": t_id
-                            })
-                            for child in elem:
-                                new_prog.append(child)
-                            total_programmes += 1
-                    elem.clear()
+                try:
+                    with open_epg_stream(local_archive) as stream:
+                        context = ET.iterparse(stream, events=("start", "end"))
+                        _, root = next(context)
 
-            # Rimozione XML temporaneo per non saturare il disco
-            if os.path.exists(xml_path):
-                os.remove(xml_path)
+                        for event, elem in context:
+                            if event == "end" and elem.tag == "channel":
+                                c_id = elem.get("id")
+                                target_ids = resolve_target_ids(c_id)
+                                if target_ids:
+                                    for tid in target_ids:
+                                        if tid not in merged_channels:
+                                            new_ch = ET.Element("channel", id=tid)
+                                            for child in elem:
+                                                new_ch.append(child)
+                                            merged_channels[tid] = ET.tostring(new_ch, encoding="utf-8")
+                                elem.clear()
+                                root.clear()
 
-        # Salvataggio del file finale compresso con gzip
-        out_gz = output_path if output_path.endswith(".gz") else f"{output_path}.gz"
-        print(f"💾 Scrittura file finale compresso: {out_gz} ...")
-        xml_bytes = ET.tostring(root_out, encoding="utf-8", method="xml")
-        with gzip.open(out_gz, "wb") as f_gz:
-            f_gz.write(xml_bytes)
+                            elif event == "end" and elem.tag == "programme":
+                                p_chan = elem.get("channel")
+                                p_start = elem.get("start")
+                                target_ids = resolve_target_ids(p_chan)
 
-        print(f"✅ EPG Generata con Successo! Canali unici: {len(written_channels)}, Programmi: {total_programmes}")
+                                if target_ids and p_start:
+                                    for tid in target_ids:
+                                        dedup_key = (tid, p_start)
+                                        # Scrive il programma solo se non è già stato inserito da un'altra sorgente
+                                        if dedup_key not in seen_programmes:
+                                            seen_programmes.add(dedup_key)
+                                            elem.set("channel", tid)
+                                            prog_out.write(b"  " + ET.tostring(elem, encoding="utf-8") + b"\n")
+                                            total_programmes += 1
+                                elem.clear()
+                                root.clear()
+
+                except Exception as e:
+                    print(f"  [ERROR] Parsing fallito per {url}: {e}")
+
+                if os.path.exists(local_archive):
+                    os.remove(local_archive)
+
+        print(f"\nCanali unici configurati: {len(merged_channels)} | Programmi estratti: {total_programmes}")
+
+        # Generazione archivio XML compresso
+        print(f"Compressione in {OUTPUT_FILE} (livello 9)...")
+        with gzip.open(OUTPUT_FILE, "wb", compresslevel=9) as gz_out:
+            gz_out.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
+            gz_out.write(b'<!DOCTYPE tv SYSTEM "xmltv.dtd">\n')
+            gz_out.write(b'<tv generator-info-name="Custom EPG Merger">\n')
+
+            for ch_bytes in merged_channels.values():
+                gz_out.write(b"  " + ch_bytes + b"\n")
+
+            with open(temp_prog_path, "rb") as prog_in:
+                shutil.copyfileobj(prog_in, gz_out)
+
+            gz_out.write(b"</tv>\n")
+
+        size_kb = os.path.getsize(OUTPUT_FILE) / 1024
+        print(f"[OK] {OUTPUT_FILE} completato con successo ({size_kb:.1f} KB)!")
 
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
 if __name__ == "__main__":
-    build_merged_epg("epg.xml.gz")
+    main()
