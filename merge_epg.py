@@ -27,7 +27,6 @@ EPG_URLS = [
     "https://epgshare01.online/epgshare01/epg_ripper_RS1.xml.gz",  # Arena Sport Premium 1 e Arena Sport 2-5 (Serbia / Bosnia BHTelecom)
     "https://epgshare01.online/epgshare01/epg_ripper_AE1.xml.gz",  # Abu Dhabi Sports 1-2 (Starzplay Arabia / UAE)
 ]
-]
 
 # 2. Mappatura completa e bidirezionale (qualsiasi variante -> lista target da generare)
 ID_MAPPING = {
