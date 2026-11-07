@@ -22,6 +22,11 @@ EPG_URLS = [
     "https://epgshare01.online/epgshare01/epg_ripper_IE1.xml.gz",  # TNT Sports 1-4 IE
     "https://epgshare01.online/epgshare01/epg_ripper_MX1.xml.gz",  # ESPN MX
     "https://epgshare01.online/epgshare01/epg_ripper_PH1.xml.gz",  # SPOTV PH
+    "https://epgshare01.online/epgshare01/epg_ripper_LV1.xml.gz",  # Setanta Sports 1-2 (Baltici Telia / Cgates)
+    "https://epgshare01.online/epgshare01/epg_ripper_LT1.xml.gz",  # Setanta LT
+    "https://epgshare01.online/epgshare01/epg_ripper_RS1.xml.gz",  # Arena Sport Premium 1 e Arena Sport 2-5 (Serbia / Bosnia BHTelecom)
+    "https://epgshare01.online/epgshare01/epg_ripper_AE1.xml.gz",  # Abu Dhabi Sports 1-2 (Starzplay Arabia / UAE)
+]
 ]
 
 # 2. Mappatura completa e bidirezionale (qualsiasi variante -> lista target da generare)
@@ -259,6 +264,43 @@ ID_MAPPING = {
     "TNT.Sports.3.ie": ["TNT.Sports.3.HD.ie"],
     "TNT.Sports.4.HD.ie": ["TNT.Sports.4.HD.ie"],
     "TNT.Sports.4.ie": ["TNT.Sports.4.HD.ie"],
+     # Setanta Sports 1
+    "Setanta.Sports.1.HD.lv": ["Setanta.Sports.1.HD.lv", "Setanta.Sports.1.HD", "SetantaSports1.lt", "SetantaSports1"],
+    "Setanta.LT.lt": ["Setanta.Sports.1.HD.lv", "Setanta.Sports.1.HD", "SetantaSports1.lt", "SetantaSports1"],
+    "SetantaSports1.lt": ["Setanta.Sports.1.HD.lv", "Setanta.Sports.1.HD", "SetantaSports1.lt", "SetantaSports1"],
+    # Setanta Sports 2
+    "Setanta.Sports.2.HD.lv": ["Setanta.Sports.2.HD.lv", "Setanta.Sports.2.HD", "SetantaSports2.lt", "SetantaSports2"],
+    "SetantaSports2.lt": ["Setanta.Sports.2.HD.lv", "Setanta.Sports.2.HD", "SetantaSports2.lt", "SetantaSports2"],
+    # Arena Sport Premium 1 Bosnia (RS1 / Balcani)
+    "Arena.PREMIUM.1.rs": ["Arena.PREMIUM.1.rs", "Arena.Sport.Premium.1.ba", "ArenaSportPremium1.ba", "ArenaSportPremium1"],
+    "Arena.Premium.1.HD.(RS).rs": ["Arena.PREMIUM.1.rs", "Arena.Sport.Premium.1.ba", "ArenaSportPremium1.ba", "ArenaSportPremium1"],
+    "Arena.Sport.Premium.1.ba": ["Arena.PREMIUM.1.rs", "Arena.Sport.Premium.1.ba", "ArenaSportPremium1.ba", "ArenaSportPremium1"],
+    # Arena Sport 2 Bosnia
+    "Arena.Sport.2.rs": ["Arena.Sport.2.rs", "Arena.Sport.2.ba", "ArenaSport2.ba", "ArenaSport2"],
+    "Arena.Sport.2.HD.(RS).rs": ["Arena.Sport.2.rs", "Arena.Sport.2.ba", "ArenaSport2.ba", "ArenaSport2"],
+    "Arena.Sport.2.HD.hr": ["Arena.Sport.2.rs", "Arena.Sport.2.ba", "ArenaSport2.ba", "ArenaSport2"],
+    "Arena.Sport.2.ba": ["Arena.Sport.2.rs", "Arena.Sport.2.ba", "ArenaSport2.ba", "ArenaSport2"],
+    # Arena Sport 3 Bosnia
+    "Arena.Sport.3.rs": ["Arena.Sport.3.rs", "Arena.Sport.3.ba", "ArenaSport3.ba", "ArenaSport3"],
+    "Arena.Sport.3.HD.(RS).rs": ["Arena.Sport.3.rs", "Arena.Sport.3.ba", "ArenaSport3.ba", "ArenaSport3"],
+    "Arena.Sport.3.HD.hr": ["Arena.Sport.3.rs", "Arena.Sport.3.ba", "ArenaSport3.ba", "ArenaSport3"],
+    "Arena.Sport.3.ba": ["Arena.Sport.3.rs", "Arena.Sport.3.ba", "ArenaSport3.ba", "ArenaSport3"],
+    # Arena Sport 4 Bosnia
+    "Arena.Sport.4.rs": ["Arena.Sport.4.rs", "Arena.Sport.4.ba", "ArenaSport4.ba", "ArenaSport4"],
+    "Arena.Sport.4.HD.(RS).rs": ["Arena.Sport.4.rs", "Arena.Sport.4.ba", "ArenaSport4.ba", "ArenaSport4"],
+    "Arena.Sport.4.HD.hr": ["Arena.Sport.4.rs", "Arena.Sport.4.ba", "ArenaSport4.ba", "ArenaSport4"],
+    "Arena.Sport.4.ba": ["Arena.Sport.4.rs", "Arena.Sport.4.ba", "ArenaSport4.ba", "ArenaSport4"],
+    # Arena Sport 5 Bosnia
+    "Arena.Sport.5.rs": ["Arena.Sport.5.rs", "Arena.Sport.5.ba", "ArenaSport5.ba", "ArenaSport5"],
+    "Arena.Sport.5.HD.(RS).rs": ["Arena.Sport.5.rs", "Arena.Sport.5.ba", "ArenaSport5.ba", "ArenaSport5"],
+    "Arena.Sport.5.HD.hr": ["Arena.Sport.5.rs", "Arena.Sport.5.ba", "ArenaSport5.ba", "ArenaSport5"],
+    "Arena.Sport.5.ba": ["Arena.Sport.5.rs", "Arena.Sport.5.ba", "ArenaSport5.ba", "ArenaSport5"],
+    # Abu Dhabi Sports 1
+    "en:.Abu.Dhabi.Sports.1.ae": ["en:.Abu.Dhabi.Sports.1.ae", "Abu.Dhabi.Sports.1.ae", "AbuDhabiSports1.ae", "AbuDhabiSports1"],
+    "Abu.Dhabi.Sports.1.ae": ["en:.Abu.Dhabi.Sports.1.ae", "Abu.Dhabi.Sports.1.ae", "AbuDhabiSports1.ae", "AbuDhabiSports1"],
+    # Abu Dhabi Sports 2
+    "en:.Abu.Dhabi.Sports.2.ae": ["en:.Abu.Dhabi.Sports.2.ae", "Abu.Dhabi.Sports.2.ae", "AbuDhabiSports2.ae", "AbuDhabiSports2"],
+    "Abu.Dhabi.Sports.2.ae": ["en:.Abu.Dhabi.Sports.2.ae", "Abu.Dhabi.Sports.2.ae", "AbuDhabiSports2.ae", "AbuDhabiSports2"],
 }
 
 # Lookup insensibile al maiuscolo/minuscolo per matching infallibile
