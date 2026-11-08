@@ -1,9 +1,3 @@
-"""
-SuperTeo EPG Unified Generator 2.0
-Generatore e unificatore EPG per SuperTeo Mobile & Android TV
-Compatibile al 100% con canali.m3u
-"""
-
 import gzip
 import os
 import shutil
@@ -15,7 +9,7 @@ import xml.etree.ElementTree as ET
 # 1. LE 18 SORGENTI EPG COMPLETE (Tutti i campionati e canali di canali.m3u)
 # ==============================================================================
 EPG_URLS = [
-    # Nazionali e Sky Sport Italia / DAZN
+    # Nazionali e Sky Sport Italia / Cinema / DAZN
     "http://epg-guide.com/wltv.gz",
     "https://epgshare01.online/epgshare01/epg_ripper_IT1.xml.gz",
     # Sky Sport Germania & Austria 1-8
@@ -141,6 +135,18 @@ TARGET_IDS = {
     "DAZN.1.it.it",
     "Milan.TV.it",
     "inter-it",
+
+    # Sky Cinema & Sky Uno Italia
+    "Sky.Uno.it",
+    "Sky.Cinema.Uno.it",
+    "Sky.Cinema.Uno.24.it",
+    "Sky.Cinema.Collection.it",
+    "Sky.Cinema.Family.it",
+    "Sky.Cinema.Action.it",
+    "Sky.Cinema.Suspense.it",
+    "Sky.Cinema.Romance.it",
+    "Sky.Cinema.Drama.it",
+    "Sky.Cinema.Comedy.it",
 
     # Canali Nazionali Italia
     "Rai1.it",
@@ -286,6 +292,68 @@ ID_MAPPING = {
     "Sky.Sport.254.it": ["Sky.Sport..254.it"],
     "Sky.Sport..254.it": ["Sky.Sport..254.it"],
 
+    # Sky Uno
+    "SkyUno.it": ["Sky.Uno.it"],
+    "Sky.Uno.it": ["Sky.Uno.it"],
+    "skyuno": ["Sky.Uno.it"],
+    "Sky Uno": ["Sky.Uno.it"],
+
+    # Sky Cinema Uno
+    "SkyCinemaUno.it": ["Sky.Cinema.Uno.it"],
+    "Sky.Cinema.Uno.it": ["Sky.Cinema.Uno.it"],
+    "skycinemauno": ["Sky.Cinema.Uno.it"],
+    "Sky Cinema Uno": ["Sky.Cinema.Uno.it"],
+
+    # Sky Cinema Uno +24
+    "SkyCinemaUno+24.it": ["Sky.Cinema.Uno.24.it"],
+    "SkyCinemaUno24.it": ["Sky.Cinema.Uno.24.it"],
+    "Sky.Cinema.Uno.+24.it": ["Sky.Cinema.Uno.24.it"],
+    "Sky.Cinema.Uno.24.it": ["Sky.Cinema.Uno.24.it"],
+    "skycinemauno24": ["Sky.Cinema.Uno.24.it"],
+    "Sky Cinema Uno +24": ["Sky.Cinema.Uno.24.it"],
+
+    # Sky Cinema Collection
+    "SkyCinemaCollection.it": ["Sky.Cinema.Collection.it"],
+    "Sky.Cinema.Collection.it": ["Sky.Cinema.Collection.it"],
+    "skycinemacollection": ["Sky.Cinema.Collection.it"],
+    "Sky Cinema Collection": ["Sky.Cinema.Collection.it"],
+
+    # Sky Cinema Family
+    "SkyCinemaFamily.it": ["Sky.Cinema.Family.it"],
+    "Sky.Cinema.Family.it": ["Sky.Cinema.Family.it"],
+    "skycinemafamily": ["Sky.Cinema.Family.it"],
+    "Sky Cinema Family": ["Sky.Cinema.Family.it"],
+
+    # Sky Cinema Action
+    "SkyCinemaAction.it": ["Sky.Cinema.Action.it"],
+    "Sky.Cinema.Action.it": ["Sky.Cinema.Action.it"],
+    "skycinemaaction": ["Sky.Cinema.Action.it"],
+    "Sky Cinema Action": ["Sky.Cinema.Action.it"],
+
+    # Sky Cinema Suspense
+    "SkyCinemaSuspense.it": ["Sky.Cinema.Suspense.it"],
+    "Sky.Cinema.Suspense.it": ["Sky.Cinema.Suspense.it"],
+    "skycinemasuspense": ["Sky.Cinema.Suspense.it"],
+    "Sky Cinema Suspense": ["Sky.Cinema.Suspense.it"],
+
+    # Sky Cinema Romance
+    "SkyCinemaRomance.it": ["Sky.Cinema.Romance.it"],
+    "Sky.Cinema.Romance.it": ["Sky.Cinema.Romance.it"],
+    "skycinemaromance": ["Sky.Cinema.Romance.it"],
+    "Sky Cinema Romance": ["Sky.Cinema.Romance.it"],
+
+    # Sky Cinema Drama
+    "SkyCinemaDrama.it": ["Sky.Cinema.Drama.it"],
+    "Sky.Cinema.Drama.it": ["Sky.Cinema.Drama.it"],
+    "skycinemadrama": ["Sky.Cinema.Drama.it"],
+    "Sky Cinema Drama": ["Sky.Cinema.Drama.it"],
+
+    # Sky Cinema Comedy
+    "SkyCinemaComedy.it": ["Sky.Cinema.Comedy.it"],
+    "Sky.Cinema.Comedy.it": ["Sky.Cinema.Comedy.it"],
+    "skycinemacomedy": ["Sky.Cinema.Comedy.it"],
+    "Sky Cinema Comedy": ["Sky.Cinema.Comedy.it"],
+
     # DAZN
     "DAZN.1.it.it": ["DAZN.1.it.it"],
     "DAZN.1.it": ["DAZN.1.it.it"],
@@ -392,12 +460,13 @@ def process_epg(output_gz_path: str = "epg.xml.gz"):
         print(f"\n[+] Canali totali unificati: {len(channels_collected)}")
         print(f"[+] Programmi totali indicizzati: {len(programmes_collected)}")
 
-        # Verifica rapida canali chiave
+        # Verifica rapida canali chiave (inclusi Cinema & Sky Uno)
         canali_chiave = [
             "AD.Sports.1.HD.ae", "AD.Sports.2.HD.ae",
             "Setanta.Sports.1.HD.lv", "Setanta.Sports.2.HD.lv",
             "Arena.PREMIUM.1.rs", "Arena.Sport.2.rs",
-            "Arena.Sport.1.HD.hr", "Sky.Sport.Uno.it", "DAZN.1.it.it"
+            "Arena.Sport.1.HD.hr", "Sky.Sport.Uno.it", "DAZN.1.it.it",
+            "Sky.Uno.it", "Sky.Cinema.Uno.it", "Sky.Cinema.Collection.it"
         ]
         print("\n--- STATO CANALI CHIAVE ---")
         for ck in canali_chiave:
