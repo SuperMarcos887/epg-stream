@@ -68,7 +68,7 @@ TARGET_IDS = {
     "Arena.Sport.5.HD.hr", "Arena.Sport.6.HD.hr", "Arena.Sport.7.HD.hr", "Arena.Sport.8.HD.hr",
     "Arena.Sport.9.HD.hr", "Arena.Sport.10.HD.hr",
 
-    # Canal+ Sport CZ & SK & Sport 1-2 CZ
+    # Canal+ Sport CZ & SK (Entrambi i suffissi per match 100%)
     "Canal+.Sport.cz", "Canal+.Sport.2.cz", "Canal+.Sport.3.cz", "Canal+.Sport.4.cz",
     "Canal+.Sport.5.cz", "Canal+.Sport.6.cz", "Canal+.Sport.7.cz", "Canal+.Sport.8.cz",
     "CANAL+.Sport.HD.sk", "CANAL+.Sport.4.HD.sk", "CANAL+.Sport.5.HD.sk",
@@ -110,7 +110,7 @@ TARGET_IDS = {
     "DAZN.1.pt", "DAZN.2.pt", "DAZN.3.pt", "DAZN.4.pt", "DAZN.5.pt", "DAZN.6.pt",
     "eleven-sport1-pt", "eleven-sport2-pt", "eleven-sport3-pt", "eleven-sport4-pt", "eleven-sport5-pt", "eleven-sport6-pt",
 
-    # Svizzera
+    # Svizzera RSI LA 1-2
     "RSI.La.1.ch", "RSI.La.2.ch", "RSI.LA.2.ch",
 
     # ESPN Brasile & Fox Sports
@@ -135,7 +135,7 @@ TARGET_IDS = {
     # SPOTV Filippine
     "SPOTV.ph", "SPOTV.2.ph",
 
-    # Sky Sport Italia & DAZN Italia (sia variante con singolo punto che doppio punto)
+    # Sky Sport Italia & DAZN Italia & Eurosport IT
     "Sky.Sport.24.it", "Sky.Sport.Uno.it", "Sky.Sport.Calcio.it", "Sky.Sport.F1.it",
     "Sky.Sport.MotoGP.it", "Sky.Sport.Tennis.it", "Sky.Sport.Arena.it", "Sky.Sport.Max.it",
     "Sky.Sport.Golf.it", "Sky.Sport.Plus.it",
@@ -151,6 +151,7 @@ TARGET_IDS = {
     "Sky.Sport.260.it", "Sky.Sport..260.it",
     "Sky.Sport.261.it", "Sky.Sport..261.it",
     "DAZN.1.it.it", "DAZN.2.it.it",
+    "Eurosport.Italia.it", "Eurosport.2.Italia.it",
     "Milan.TV.it", "Inter.TV.it", "inter-it",
 
     # Sky Intrattenimento & Cinema Italia
@@ -173,10 +174,10 @@ TARGET_IDS = {
 }
 
 # ==============================================================================
-# 3. ID MAPPING (Mappa gli ID delle 20 fonti verso i target di canali.m3u)
+# 3. ID MAPPING (Normalizza e mappa varianti verso i target)
 # ==============================================================================
 ID_MAPPING = {
-    # --- CANALI NAZIONALI ITALIA (da wltv.gz e IT1) ---
+    # --- NAZIONALI ITALIA (da wltv.gz e IT1) ---
     "rete4": ["Rete4.it"],
     "canale5": ["Canale5.it"],
     "italia1": ["Italia1.it"],
@@ -202,12 +203,28 @@ ID_MAPPING = {
     "la7": ["la7"],
     "LA7.it": ["la7"],
 
-    # --- SVIZZERA RSI LA 1-2 (da CH1) ---
+    # --- SVIZZERA RSI (da CH1) ---
     "RSI.LA.2.ch": ["RSI.LA.2.ch", "RSI.La.2.ch"],
     "RSI.La.2.ch": ["RSI.LA.2.ch", "RSI.La.2.ch"],
     "RSI.La.1.ch": ["RSI.La.1.ch"],
 
-    # --- SKY SPORT CALCIO / CANALI 251-261 (da IT1 con doppio punto) ---
+    # --- CANAL+ SPORT CZ / SK ---
+    "CANAL+.Sport.HD.sk": ["CANAL+.Sport.HD.sk", "Canal+.Sport.cz"],
+    "Canal+.Sport.cz": ["CANAL+.Sport.HD.sk", "Canal+.Sport.cz"],
+    "Canal+.Sport.2.cz": ["Canal+.Sport.2.cz"],
+    "Canal+.Sport.3.cz": ["Canal+.Sport.3.cz"],
+    "CANAL+.Sport.4.HD.sk": ["CANAL+.Sport.4.HD.sk", "Canal+.Sport.4.cz"],
+    "Canal+.Sport.4.cz": ["CANAL+.Sport.4.HD.sk", "Canal+.Sport.4.cz"],
+    "CANAL+.Sport.5.HD.sk": ["CANAL+.Sport.5.HD.sk", "Canal+.Sport.5.cz"],
+    "Canal+.Sport.5.cz": ["CANAL+.Sport.5.HD.sk", "Canal+.Sport.5.cz"],
+    "CANAL+.Sport.6.HD.sk": ["CANAL+.Sport.6.HD.sk", "Canal+.Sport.6.cz"],
+    "Canal+.Sport.6.cz": ["CANAL+.Sport.6.HD.sk", "Canal+.Sport.6.cz"],
+    "CANAL+.Sport.7.HD.sk": ["CANAL+.Sport.7.HD.sk", "Canal+.Sport.7.cz"],
+    "Canal+.Sport.7.cz": ["CANAL+.Sport.7.HD.sk", "Canal+.Sport.7.cz"],
+    "CANAL+.Sport.8.HD.sk": ["CANAL+.Sport.8.HD.sk", "Canal+.Sport.8.cz"],
+    "Canal+.Sport.8.cz": ["CANAL+.Sport.8.HD.sk", "Canal+.Sport.8.cz"],
+
+    # --- SKY SPORT CALCIO / 251-261 (da IT1 con doppio punto) ---
     "Sky.Sport..251.it": ["Sky.Sport..251.it", "Sky.Sport.251.it"],
     "Sky.Sport.251.it": ["Sky.Sport..251.it", "Sky.Sport.251.it"],
     "Sky.Sport..252.it": ["Sky.Sport..252.it", "Sky.Sport.252.it"],
@@ -276,26 +293,12 @@ ID_MAPPING = {
     "TNT.Sports.3.ie": ["TNT.Sports.3.HD.ie", "TNT.Sports.3.uk"],
     "TNT.Sports.4.ie": ["TNT.Sports.4.HD.ie", "TNT.Sports.4.uk"],
 
-    # --- SKY SPORT GERMANIA (da DE1 senza HD) ---
+    # --- SKY SPORT GERMANIA (da DE1) ---
     "Sky.Sport.F1.de": ["Sky.Sport.F1.de", "Sky.Sport.F1.HD.de"],
     "Sky.Sport.Premier.League.de": ["Sky.Sport.Premier.League.de", "Sky.Sport.Premier.League.HD.de"],
     "Sky.Sport.Mix.de": ["Sky.Sport.Mix.de", "Sky.Sport.Mix.HD.de"],
     "Sky.Sport.Tennis.de": ["Sky.Sport.Tennis.de", "Sky.Sport.Tennis.HD.de"],
     "Sky.Sport.News.de": ["Sky.Sport.News.de"],
-
-    # --- CANAL+ SPORT CZ / SK ---
-    "CANAL+.Sport.HD.sk": ["CANAL+.Sport.HD.sk", "Canal+.Sport.cz"],
-    "CANAL+.Sport.4.HD.sk": ["CANAL+.Sport.4.HD.sk", "Canal+.Sport.4.cz"],
-    "CANAL+.Sport.5.HD.sk": ["CANAL+.Sport.5.HD.sk", "Canal+.Sport.5.cz"],
-    "CANAL+.Sport.6.HD.sk": ["CANAL+.Sport.6.HD.sk", "Canal+.Sport.6.cz"],
-    "CANAL+.Sport.7.HD.sk": ["CANAL+.Sport.7.HD.sk", "Canal+.Sport.7.cz"],
-    "CANAL+.Sport.8.HD.sk": ["CANAL+.Sport.8.HD.sk", "Canal+.Sport.8.cz"],
-    "Canal+.Sport.cz": ["CANAL+.Sport.HD.sk", "Canal+.Sport.cz"],
-    "Canal+.Sport.4.cz": ["CANAL+.Sport.4.HD.sk", "Canal+.Sport.4.cz"],
-    "Canal+.Sport.5.cz": ["CANAL+.Sport.5.HD.sk", "Canal+.Sport.5.cz"],
-    "Canal+.Sport.6.cz": ["CANAL+.Sport.6.HD.sk", "Canal+.Sport.6.cz"],
-    "Canal+.Sport.7.cz": ["CANAL+.Sport.7.HD.sk", "Canal+.Sport.7.cz"],
-    "Canal+.Sport.8.cz": ["CANAL+.Sport.8.HD.sk", "Canal+.Sport.8.cz"],
 
     # --- ESPN MESSICO (da MX1) ---
     "ESPN.MX.mx": ["ESPN.MX.mx", "ESPN.mx"],
@@ -430,7 +433,7 @@ RU_TEAMS = {
     'Брага': 'Braga',
     'Аланьяспор': 'Alanyaspor', 'Трабзонспор': 'Trabzonspor', 'Галатасарай': 'Galatasaray',
     'Амед': 'Amed SK', 'Чорум': 'Çorum FK', 'Фенербахче': 'Fenerbahçe', 'Бешикташ': 'Beşiktaş',
-    'Атлетико Паранаэнсе': 'Athletico Paranaense', 'Васко да Гама': 'Vasco da Gama',
+    'Атлетико Паранаэнсе': 'Athletico Paranaense', 'Васко да Gamа': 'Vasco da Gama',
     'Витория': 'Vitória', 'Флуминенсе': 'Fluminense', 'Крузейро': 'Cruzeiro', 'Баия': 'Bahia',
     'Палмейрас': 'Palmeiras', 'Ремо': 'Remo', 'Сан-Паулу': 'São Paulo', 'Коринтианс': 'Corinthians',
     'Фламенго': 'Flamengo', 'Ботафого': 'Botafogo', 'Гремио': 'Grêmio', 'Интернасьонал': 'Internacional',
@@ -569,10 +572,12 @@ def process_epg(output_gz_path: str = "epg.xml.gz"):
 
         # Verifica canali chiave
         canali_verifica = [
+            "CANAL+.Sport.HD.sk", "Canal+.Sport.2.cz", "CANAL+.Sport.4.HD.sk",
             "Rete4.it", "Canale5.it", "Italia1.it", "Tv8.it",
             "RSI.LA.2.ch", "Sky.Sport..251.it", "beINSports1.au",
             "CBS.Sports.Golazo.Network.us2", "SPORT.TV1.HD.pt",
-            "TNT.Sports.1.HD.ie", "Sky.Sport.F1.de"
+            "TNT.Sports.1.HD.ie", "Sky.Sport.F1.de", "ESPN.MX.mx",
+            "eleven-sport1-pt", "inter-it", "Eurosport.Italia.it"
         ]
         print("\n--- STATO VERIFICA CANALI CHIAVE ---")
         for ck in canali_verifica:
