@@ -6,7 +6,7 @@ import requests
 import xml.etree.ElementTree as ET
 
 # ==============================================================================
-# 1. LE 20 SORGENTI EPG COMPLETE (Tutti i campionati e canali di canali.m3u)
+# 1. LE 18 SORGENTI EPG COMPLETE (Tutti i campionati e canali di canali.m3u)
 # ==============================================================================
 EPG_URLS = [
     # Nazionali e Sky Sport Italia / Cinema / DAZN
@@ -16,10 +16,6 @@ EPG_URLS = [
     "https://epgshare01.online/epgshare01/epg_ripper_DE1.xml.gz",
     # Canal+ Sport 1-8 CZ & Sport 1-2 CZ
     "https://epgshare01.online/epgshare01/epg_ripper_CZ1.xml.gz",
-    # Nova Sport 1-6 HD & Canal+ Sport SK (Slovacchia)
-    "https://epgshare01.online/epgshare01/epg_ripper_SK1.xml.gz",
-    # Match! Canali Sport Russia (Match TV, Futbol 1-3, Arena, Premier, Fight)
-    "https://epgshare01.online/epgshare01/epg_ripper_UA1.xml.gz",
     # Eleven Sports 1-4 PL & Canal+ Sport PL
     "https://epgshare01.online/epgshare01/epg_ripper_PL1.xml.gz",
     # Setanta Sports 1 & 2 HD (Lettonia / Baltici Telia & cgates)
@@ -47,6 +43,10 @@ EPG_URLS = [
     "https://epgshare01.online/epgshare01/epg_ripper_AU1.xml.gz",
     # SPOTV 1-2 Filippine
     "https://epgshare01.online/epgshare01/epg_ripper_PH1.xml.gz",
+	# Nova Sport 1-6 HD & Canal+ Sport SK (Slovacchia)
+    "https://epgshare01.online/epgshare01/epg_ripper_SK1.xml.gz",
+    # Match! Canali Sport Russia (Match TV, Futbol 1-3, Arena, Premier, Fight)
+    "https://epgshare01.online/epgshare01/epg_ripper_UA1.xml.gz",
 ]
 
 # ==============================================================================
@@ -92,23 +92,6 @@ TARGET_IDS = {
     "Sport1.cz",
     "Sport2.cz",
 
-    # Nova Sport 1-6 HD (Slovacchia / Repubblica Ceca)
-    "Nova.Sport.1.HD.sk",
-    "Nova.Sport.2.HD.sk",
-    "Nova.Sport.3.HD.sk",
-    "Nova.Sport.4.HD.sk",
-    "Nova.Sport.5.HD.sk",
-    "Nova.Sport.6.HD.sk",
-
-    # Match! Sport Russia
-    "Match.TV.ru",
-    "Match.Futbol.1.ru",
-    "Match.Futbol.2.ru",
-    "Match.Futbol.3.ru",
-    "Match.Arena.ru",
-    "Match.Premier.ru",
-    "Match.Fight.ru",
-
     # Eleven Sports PL
     "Eleven.Sports.1.HD.pl",
     "Eleven.Sports.2.HD.pl",
@@ -136,109 +119,31 @@ TARGET_IDS = {
     "Sky.Sport.8.de",
     "Sky.Sport.9.de",
     "Sky.Sport.10.de",
-    "Sky.Sport.Top.Event.de",
-    "Sky.Sport.Bundesliga.HD.de",
-    "Sky.Sport.Bundesliga.1.HD.de",
-    "Sky.Sport.Bundesliga.2.HD.de",
-    "Sky.Sport.Bundesliga.3.HD.de",
-    "Sky.Sport.Bundesliga.4.HD.de",
-    "Sky.Sport.Bundesliga.5.HD.de",
-    "Sky.Sport.Premier.League.HD.de",
-    "Sky.Sport.Mix.HD.de",
-    "Sky.Sport.Tennis.HD.de",
-    "Sky.Sport.F1.HD.de",
+    "Sky.Sport.F1.de",
+    "Sky.Sport.Mix.de",
+    "Sky.Sport.News.de",
+    "Sky.Sport.Premier.League.de",
+    "Sky.Sport.Tennis.de",
 
-    # Portogallo Sport TV & Eleven Sports PT
-    "Sport.TV.1.pt",
-    "Sport.TV.2.pt",
-    "Sport.TV.3.pt",
-    "Sport.TV.4.pt",
-    "Sport.TV.5.pt",
-    "Sport.TV.6.pt",
-    "Sport.TV.7.pt",
-    "DAZN.1.pt",
-    "DAZN.2.pt",
-    "DAZN.3.pt",
-    "DAZN.4.pt",
-    "DAZN.5.pt",
-    "DAZN.6.pt",
-
-    # Svizzera
-    "RSI.La.1.ch",
-    "RSI.La.2.ch",
-
-    # ESPN Brasile & Fox Sports
-    "ESPN.br",
-    "ESPN.2.br",
-    "ESPN.3.br",
-    "ESPN.4.br",
-    "ESPN.5.br",
-    "ESPN.6.br",
-    "Fox.Sports.2.br",
-
-    # ESPN Messico
-    "ESPN.mx",
-    "ESPN.2.mx",
-    "ESPN.3.mx",
-    "ESPN.4.mx",
-
-    # TNT Sports UK
-    "TNT.Sports.1.uk",
-    "TNT.Sports.2.uk",
-    "TNT.Sports.3.uk",
-    "TNT.Sports.4.uk",
-    "TNT.Sports.Ultimate.uk",
-
-    # USA Sports
-    "CBS.Sports.Golazo.Network.us",
-    "Fox.Deportes.us",
-    "Fox.Sports.1.us",
-    "Fox.Sports.2.us",
-
-    # Australia beIN Sports
-    "beIN.Sports.1.au",
-    "beIN.Sports.2.au",
-    "beIN.Sports.3.au",
-
-    # SPOTV Filippine
-    "SPOTV.ph",
-    "SPOTV.2.ph",
-
-    # Sky Sport Italia & DAZN Italia
-    "Sky.Sport.24.it",
+    # Sky Sport Italia & DAZN & Club
     "Sky.Sport.Uno.it",
     "Sky.Sport.Calcio.it",
-    "Sky.Sport.F1.it",
-    "Sky.Sport.MotoGP.it",
     "Sky.Sport.Tennis.it",
     "Sky.Sport.Arena.it",
-    "Sky.Sport.Max.it",
-    "Sky.Sport.Golf.it",
-    "Sky.Sport.Plus.it",
-    "Sky.Sport.251.it",
-    "Sky.Sport.252.it",
-    "Sky.Sport.253.it",
-    "Sky.Sport.254.it",
-    "Sky.Sport.255.it",
-    "Sky.Sport.256.it",
-    "Sky.Sport.257.it",
-    "Sky.Sport.258.it",
-    "Sky.Sport.259.it",
-    "Sky.Sport.260.it",
-    "Sky.Sport.261.it",
+    "Sky.Sport.F1.it",
+    "Sky.Sport.MotoGP.it",
+    "Sky.Sport..251.it",
+    "Sky.Sport..252.it",
+    "Sky.Sport..253.it",
+    "Sky.Sport..254.it",
     "DAZN.1.it.it",
-    "DAZN.2.it.it",
+    "Milan.TV.it",
+    "inter-it",
 
-    # Sky Intrattenimento & Cinema Italia
+    # Sky Cinema & Sky Uno Italia
     "Sky.Uno.it",
-    "Sky.Atlantic.it",
-    "Sky.Serie.it",
-    "Sky.Investigation.it",
-    "Sky.Arte.it",
-    "Sky.Documentaries.it",
-    "Sky.Nature.it",
     "Sky.Cinema.Uno.it",
-    "Sky.Cinema.Due.it",
+    "Sky.Cinema.Uno.24.it",
     "Sky.Cinema.Collection.it",
     "Sky.Cinema.Family.it",
     "Sky.Cinema.Action.it",
@@ -257,43 +162,77 @@ TARGET_IDS = {
     "la7",
     "Tv8.it",
     "Nove.it",
-    "20Mediaset.it",
-    "Rai4.it",
-    "Iris.it",
-    "RaiMovie.it",
-    "RaiPremium.it",
-    "Cielo.it",
-    "TwentySeven.it",
-    "La5.it",
-    "RealTime.it",
-    "QVC.it",
-    "Rai5.it",
-    "MediasetItalia2.it",
-    "MediasetExtra.it",
-    "DMAX.it",
-    "RaiStoria.it",
-    "RaiScuola.it",
-    "RaiSport.it",
-    "Supertennis.it",
-    "Focus.it",
-    "TopCrime.it",
-    "Giallo.it",
-    "Boing.it",
-    "K2.it",
-    "RaiGulp.it",
-    "RaiYoyo.it",
-    "Frisbee.it",
-    "Cartoonito.it",
-    "Super.it",
-    "TgCom24.it",
-    "RaiNews24.it",
-    "SkyTG24.it",
-    "Cine34.it",
-    "MotorTrend.it",
+
+    # RSI Svizzera
+    "RSI.LA.2.ch",
+
+    # TNT Sports UK/IE
+    "TNT.Sports.1.HD.ie",
+    "TNT.Sports.2.HD.ie",
+    "TNT.Sports.3.HD.ie",
+    "TNT.Sports.4.HD.ie",
+
+    # Sport TV Portogallo & Eleven PT
+    "SPORT.TV+.HD.pt",
+    "SPORT.TV1.HD.pt",
+    "SPORT.TV2.HD.pt",
+    "SPORT.TV3.HD.pt",
+    "SPORT.TV4.HD.pt",
+    "SPORT.TV5.HD.pt",
+    "Sport.TV.6.HD.pt",
+    "Sport.TV.7.HD.pt",
+    "eleven-sport1-pt",
+    "eleven-sport2-pt",
+    "eleven-sport3-pt",
+    "eleven-sport4-pt",
+    "eleven-sport5-pt",
+    "eleven-sport6-pt",
+
+    # ESPN Brasile
+    "ESPN.br",
+    "ESPN.2.br",
+    "ESPN.3.br",
+    "ESPN.4.br",
+    "ESPN.5.br",
+    "ESPN.6.br",
+
+    # ESPN Messico
+    "ESPN.MX.mx",
+    "ESPN.2.mx",
+    "ESPN.3.mx",
+    "ESPN.4.mx",
+
+    # USA
+    "CBS.Sports.Golazo.Network.us2",
+    "Fox.Deportes.HD.us2",
+    "Fox.Sports.4K.us2",
+
+    # Australia & Filippine
+    "beINSports1.au",
+    "beINSports2.au",
+    "beINSports3.au",
+    "Spotv Hd.ph",
+    "Spotv Hd2.ph",
+	
+	# Nova Sport 1-6 HD (Slovacchia / Repubblica Ceca)
+    "Nova.Sport.1.HD.sk",
+    "Nova.Sport.2.HD.sk",
+    "Nova.Sport.3.HD.sk",
+    "Nova.Sport.4.HD.sk",
+    "Nova.Sport.5.HD.sk",
+    "Nova.Sport.6.HD.sk",
+    # Match! Sport Russia
+    "Match.TV.ru",
+    "Match.Futbol.1.ru",
+    "Match.Futbol.2.ru",
+    "Match.Futbol.3.ru",
+    "Match.Arena.ru",
+    "Match.Premier.ru",
+    "Match.Fight.ru",
 }
 
 # ==============================================================================
-# 3. ID MAPPING COMPLETO (Normalizza variazioni da fonti XMLTV verso i TARGET)
+# 3. MAPPATURA ALIAS E VARIANTI (ID Sorgente XML -> ID Target M3U SuperTeo)
 # ==============================================================================
 ID_MAPPING = {
     # Abu Dhabi Sports
@@ -331,258 +270,138 @@ ID_MAPPING = {
     "Arena.Sport.9.HD.hr": ["Arena.Sport.9.HD.hr"],
     "Arena.Sport.10.HD.hr": ["Arena.Sport.10.HD.hr"],
 
-    # Canal+ Sport CZ / SK & Sport 1-2
-    "Canal+.Sport.cz": ["Canal+.Sport.cz"],
-    "CANAL+.Sport.HD.sk": ["Canal+.Sport.cz"],
-    "Canal+.Sport.2.cz": ["Canal+.Sport.2.cz"],
-    "Canal+.Sport.3.cz": ["Canal+.Sport.3.cz"],
-    "Canal+.Sport.4.cz": ["Canal+.Sport.4.cz"],
-    "CANAL+.Sport.4.HD.sk": ["Canal+.Sport.4.cz"],
-    "Canal+.Sport.5.cz": ["Canal+.Sport.5.cz"],
-    "CANAL+.Sport.5.HD.sk": ["Canal+.Sport.5.cz"],
-    "Canal+.Sport.6.cz": ["Canal+.Sport.6.cz"],
-    "CANAL+.Sport.6.HD.sk": ["Canal+.Sport.6.cz"],
-    "Canal+.Sport.7.cz": ["Canal+.Sport.7.cz"],
-    "CANAL+.Sport.7.HD.sk": ["Canal+.Sport.7.cz"],
-    "Canal+.Sport.8.cz": ["Canal+.Sport.8.cz"],
-    "CANAL+.Sport.8.HD.sk": ["Canal+.Sport.8.cz"],
-    "Sport1.cz": ["Sport1.cz"],
-    "Sport2.cz": ["Sport2.cz"],
-
-    # Nova Sport 1-6 HD (SK & CZ)
-    "Nova.Sport.1.HD.sk": ["Nova.Sport.1.HD.sk"],
-    "Nova.Sport.1.cz": ["Nova.Sport.1.HD.sk"],
-    "Nova.Sport.2.HD.sk": ["Nova.Sport.2.HD.sk"],
-    "Nova.Sport.2.cz": ["Nova.Sport.2.HD.sk"],
-    "Nova.Sport.3.HD.sk": ["Nova.Sport.3.HD.sk"],
-    "Nova.Sport.3.cz": ["Nova.Sport.3.HD.sk"],
-    "Nova.Sport.4.HD.sk": ["Nova.Sport.4.HD.sk"],
-    "Nova.Sport.4.cz": ["Nova.Sport.4.HD.sk"],
-    "Nova.Sport.5.HD.sk": ["Nova.Sport.5.HD.sk"],
-    "Nova.Sport.5.cz": ["Nova.Sport.5.HD.sk"],
-    "Nova.Sport.6.HD.sk": ["Nova.Sport.6.HD.sk"],
-    "Nova.Sport.6.cz": ["Nova.Sport.6.HD.sk"],
-
-    # Match! Sport Russia (da UA1)
-    "Матч.ТВ.HD.[RU].ua": ["Match.TV.ru"],
-    "Матч.ТВ.[RU].ua": ["Match.TV.ru"],
-    "Match.TV.ru": ["Match.TV.ru"],
-    "Матч!.Футбол.1.HD.[RU].ua": ["Match.Futbol.1.ru"],
-    "Матч!.Футбол.1.[RU].ua": ["Match.Futbol.1.ru"],
-    "Match.Futbol.1.ru": ["Match.Futbol.1.ru"],
-    "Матч!.Футбол.2.HD.[RU].ua": ["Match.Futbol.2.ru"],
-    "Матч!.Футбол.2.[RU].ua": ["Match.Futbol.2.ru"],
-    "Match.Futbol.2.ru": ["Match.Futbol.2.ru"],
-    "Матч!.Футбол.3.HD.[RU].ua": ["Match.Futbol.3.ru"],
-    "Матч!.Футбол.3.[RU].ua": ["Match.Futbol.3.ru"],
-    "Match.Futbol.3.ru": ["Match.Futbol.3.ru"],
-    "Матч!.Арена.HD.[RU].ua": ["Match.Arena.ru"],
-    "Матч!.Арена.[RU].ua": ["Match.Arena.ru"],
-    "Match.Arena.ru": ["Match.Arena.ru"],
-    "Матч.Премьер.HD.[RU].ua": ["Match.Premier.ru"],
-    "Матч.Премьер.[RU].ua": ["Match.Premier.ru"],
-    "Match.Premier.ru": ["Match.Premier.ru"],
-    "Матч!.Боец.[RU].ua": ["Match.Fight.ru"],
-    "Match.Fight.ru": ["Match.Fight.ru"],
-
-    # Sky Sport Germania & Austria
-    "Sky.Sport.1.de": ["Sky.Sport.1.de"],
-    "Sky.Sport.2.de": ["Sky.Sport.2.de"],
-    "Sky.Sport.3.de": ["Sky.Sport.3.de"],
-    "Sky.Sport.4.de": ["Sky.Sport.4.de"],
-    "Sky.Sport.5.de": ["Sky.Sport.5.de"],
-    "Sky.Sport.6.de": ["Sky.Sport.6.de"],
-    "Sky.Sport.7.de": ["Sky.Sport.7.de"],
-    "Sky.Sport.8.de": ["Sky.Sport.8.de"],
-    "Sky.Sport.9.de": ["Sky.Sport.9.de"],
-    "Sky.Sport.10.de": ["Sky.Sport.10.de"],
-    "Sky.Sport.Top.Event.de": ["Sky.Sport.Top.Event.de"],
-    "Sky.Sport.Bundesliga.HD.de": ["Sky.Sport.Bundesliga.HD.de"],
-    "Sky.Sport.Bundesliga.1.HD.de": ["Sky.Sport.Bundesliga.1.HD.de"],
-    "Sky.Sport.Bundesliga.2.HD.de": ["Sky.Sport.Bundesliga.2.HD.de"],
-    "Sky.Sport.Bundesliga.3.HD.de": ["Sky.Sport.Bundesliga.3.HD.de"],
-    "Sky.Sport.Bundesliga.4.HD.de": ["Sky.Sport.Bundesliga.4.HD.de"],
-    "Sky.Sport.Bundesliga.5.HD.de": ["Sky.Sport.Bundesliga.5.HD.de"],
-    "Sky.Sport.Premier.League.HD.de": ["Sky.Sport.Premier.League.HD.de"],
-    "Sky.Sport.Mix.HD.de": ["Sky.Sport.Mix.HD.de"],
-    "Sky.Sport.Tennis.HD.de": ["Sky.Sport.Tennis.HD.de"],
-    "Sky.Sport.F1.HD.de": ["Sky.Sport.F1.HD.de"],
-    "Sky.Sport.Austria.1.HD.de": ["Sky.Sport.Austria.1.HD.de"],
-    "Sky.Sport.Austria.2.HD.de": ["Sky.Sport.Austria.2.HD.de"],
-    "Sky.Sport.Austria.3.HD.de": ["Sky.Sport.Austria.3.HD.de"],
-    "Sky.Sport.Austria.4.HD.de": ["Sky.Sport.Austria.4.HD.de"],
-    "Sky.Sport.Austria.5.HD.de": ["Sky.Sport.Austria.5.HD.de"],
-    "Sky.Sport.Austria.6.HD.de": ["Sky.Sport.Austria.6.HD.de"],
-    "Sky.Sport.Austria.7.HD.de": ["Sky.Sport.Austria.7.HD.de"],
-    "Sky.Sport.Austria.8.HD.de": ["Sky.Sport.Austria.8.HD.de"],
-
-    # Portogallo Sport TV & Eleven Sports PT
-    "Sport.TV.1.pt": ["Sport.TV.1.pt"],
-    "Sport.TV.2.pt": ["Sport.TV.2.pt"],
-    "Sport.TV.3.pt": ["Sport.TV.3.pt"],
-    "Sport.TV.4.pt": ["Sport.TV.4.pt"],
-    "Sport.TV.5.pt": ["Sport.TV.5.pt"],
-    "Sport.TV.6.pt": ["Sport.TV.6.pt"],
-    "Sport.TV.7.pt": ["Sport.TV.7.pt"],
-    "DAZN.1.pt": ["DAZN.1.pt"],
-    "DAZN.2.pt": ["DAZN.2.pt"],
-    "DAZN.3.pt": ["DAZN.3.pt"],
-    "DAZN.4.pt": ["DAZN.4.pt"],
-    "DAZN.5.pt": ["DAZN.5.pt"],
-    "DAZN.6.pt": ["DAZN.6.pt"],
-
-    # Svizzera
-    "RSI.La.1.ch": ["RSI.La.1.ch"],
-    "RSI.La.2.ch": ["RSI.La.2.ch"],
-
-    # Brasile ESPN
-    "ESPN.br": ["ESPN.br"],
-    "ESPN.2.br": ["ESPN.2.br"],
-    "ESPN.3.br": ["ESPN.3.br"],
-    "ESPN.4.br": ["ESPN.4.br"],
-    "ESPN.5.br": ["ESPN.5.br"],
-    "ESPN.6.br": ["ESPN.6.br"],
-    "Fox.Sports.2.br": ["Fox.Sports.2.br"],
-
-    # Messico ESPN
-    "ESPN.mx": ["ESPN.mx"],
-    "ESPN.2.mx": ["ESPN.2.mx"],
-    "ESPN.3.mx": ["ESPN.3.mx"],
-    "ESPN.4.mx": ["ESPN.4.mx"],
-
-    # TNT Sports UK
-    "TNT.Sports.1.uk": ["TNT.Sports.1.uk"],
-    "TNT.Sports.2.uk": ["TNT.Sports.2.uk"],
-    "TNT.Sports.3.uk": ["TNT.Sports.3.uk"],
-    "TNT.Sports.4.uk": ["TNT.Sports.4.uk"],
-    "TNT.Sports.Ultimate.uk": ["TNT.Sports.Ultimate.uk"],
-
-    # USA Sports
-    "CBS.Sports.Golazo.Network.us": ["CBS.Sports.Golazo.Network.us"],
-    "Fox.Deportes.us": ["Fox.Deportes.us"],
-    "Fox.Sports.1.us": ["Fox.Sports.1.us"],
-    "Fox.Sports.2.us": ["Fox.Sports.2.us"],
-
-    # Australia beIN
-    "beIN.Sports.1.au": ["beIN.Sports.1.au"],
-    "beIN.Sports.2.au": ["beIN.Sports.2.au"],
-    "beIN.Sports.3.au": ["beIN.Sports.3.au"],
-
-    # SPOTV Filippine
-    "SPOTV.ph": ["SPOTV.ph"],
-    "SPOTV.2.ph": ["SPOTV.2.ph"],
-
-    # Sky Sport Italia & DAZN Italia (da wltv.gz o IT1)
-    "Sky.Sport.24.it": ["Sky.Sport.24.it"],
-    "Sky.Sport.Uno.it": ["Sky.Sport.Uno.it"],
-    "Sky.Sport.Calcio.it": ["Sky.Sport.Calcio.it"],
-    "Sky.Sport.F1.it": ["Sky.Sport.F1.it"],
-    "Sky.Sport.MotoGP.it": ["Sky.Sport.MotoGP.it"],
-    "Sky.Sport.Tennis.it": ["Sky.Sport.Tennis.it"],
-    "Sky.Sport.Arena.it": ["Sky.Sport.Arena.it"],
-    "Sky.Sport.Max.it": ["Sky.Sport.Max.it"],
-    "Sky.Sport.Golf.it": ["Sky.Sport.Golf.it"],
-    "Sky.Sport.Plus.it": ["Sky.Sport.Plus.it"],
-    "Sky.Sport.251.it": ["Sky.Sport.251.it"],
-    "Sky.Sport.252.it": ["Sky.Sport.252.it"],
-    "Sky.Sport.253.it": ["Sky.Sport.253.it"],
-    "Sky.Sport.254.it": ["Sky.Sport.254.it"],
-    "Sky.Sport.255.it": ["Sky.Sport.255.it"],
-    "Sky.Sport.256.it": ["Sky.Sport.256.it"],
-    "Sky.Sport.257.it": ["Sky.Sport.257.it"],
-    "Sky.Sport.258.it": ["Sky.Sport.258.it"],
-    "Sky.Sport.259.it": ["Sky.Sport.259.it"],
-    "Sky.Sport.260.it": ["Sky.Sport.260.it"],
-    "Sky.Sport.261.it": ["Sky.Sport.261.it"],
-    "DAZN.1.it.it": ["DAZN.1.it.it"],
-    "DAZN.2.it.it": ["DAZN.2.it.it"],
-
-    # Sky Intrattenimento & Cinema Italia
-    "Sky.Uno.it": ["Sky.Uno.it"],
-    "SkyUno.it": ["Sky.Uno.it"],
-    "Sky.Atlantic.it": ["Sky.Atlantic.it"],
-    "SkyAtlantic.it": ["Sky.Atlantic.it"],
-    "Sky.Serie.it": ["Sky.Serie.it"],
-    "SkySerie.it": ["Sky.Serie.it"],
-    "Sky.Investigation.it": ["Sky.Investigation.it"],
-    "SkyInvestigation.it": ["Sky.Investigation.it"],
-    "Sky.Arte.it": ["Sky.Arte.it"],
-    "SkyArte.it": ["Sky.Arte.it"],
-    "Sky.Documentaries.it": ["Sky.Documentaries.it"],
-    "SkyDocumentaries.it": ["Sky.Documentaries.it"],
-    "Sky.Nature.it": ["Sky.Nature.it"],
-    "SkyNature.it": ["Sky.Nature.it"],
-    "Sky.Cinema.Uno.it": ["Sky.Cinema.Uno.it"],
-    "SkyCinemaUno.it": ["Sky.Cinema.Uno.it"],
-    "Sky.Cinema.Due.it": ["Sky.Cinema.Due.it"],
-    "SkyCinemaDue.it": ["Sky.Cinema.Due.it"],
-    "Sky.Cinema.Collection.it": ["Sky.Cinema.Collection.it"],
-    "SkyCinemaCollection.it": ["Sky.Cinema.Collection.it"],
-    "Sky.Cinema.Family.it": ["Sky.Cinema.Family.it"],
-    "SkyCinemaFamily.it": ["Sky.Cinema.Family.it"],
-    "Sky.Cinema.Action.it": ["Sky.Cinema.Action.it"],
-    "SkyCinemaAction.it": ["Sky.Cinema.Action.it"],
-    "Sky.Cinema.Suspense.it": ["Sky.Cinema.Suspense.it"],
-    "SkyCinemaSuspense.it": ["Sky.Cinema.Suspense.it"],
-    "Sky.Cinema.Romance.it": ["Sky.Cinema.Romance.it"],
-    "SkyCinemaRomance.it": ["Sky.Cinema.Romance.it"],
-    "Sky.Cinema.Drama.it": ["Sky.Cinema.Drama.it"],
-    "SkyCinemaDrama.it": ["Sky.Cinema.Drama.it"],
-    "Sky.Cinema.Comedy.it": ["Sky.Cinema.Comedy.it"],
-    "SkyCinemaComedy.it": ["Sky.Cinema.Comedy.it"],
-
-    # Nazionali Italiani
+    # Nazionali Italia e wltv
+    "rai1": ["Rai1.it"],
     "Rai1.it": ["Rai1.it"],
+    "rai2": ["Rai2.it"],
     "Rai2.it": ["Rai2.it"],
+    "rai3": ["Rai3.it"],
     "Rai3.it": ["Rai3.it"],
+    "rete4": ["Rete4.it"],
     "Rete4.it": ["Rete4.it"],
+    "canale5": ["Canale5.it"],
     "Canale5.it": ["Canale5.it"],
+    "italia1": ["Italia1.it"],
     "Italia1.it": ["Italia1.it"],
     "la7": ["la7"],
-    "LA7.it": ["la7"],
+    "La7.it": ["la7"],
+    "tv8": ["Tv8.it"],
     "Tv8.it": ["Tv8.it"],
+    "nove": ["Nove.it"],
     "Nove.it": ["Nove.it"],
-    "20Mediaset.it": ["20Mediaset.it"],
-    "Rai4.it": ["Rai4.it"],
-    "Iris.it": ["Iris.it"],
-    "RaiMovie.it": ["RaiMovie.it"],
-    "RaiPremium.it": ["RaiPremium.it"],
-    "Cielo.it": ["Cielo.it"],
-    "TwentySeven.it": ["TwentySeven.it"],
-    "La5.it": ["La5.it"],
-    "RealTime.it": ["RealTime.it"],
-    "QVC.it": ["QVC.it"],
-    "Rai5.it": ["Rai5.it"],
-    "MediasetItalia2.it": ["MediasetItalia2.it"],
-    "MediasetExtra.it": ["MediasetExtra.it"],
-    "DMAX.it": ["DMAX.it"],
-    "RaiStoria.it": ["RaiStoria.it"],
-    "RaiScuola.it": ["RaiScuola.it"],
-    "RaiSport.it": ["RaiSport.it"],
-    "Supertennis.it": ["Supertennis.it"],
-    "Focus.it": ["Focus.it"],
-    "TopCrime.it": ["TopCrime.it"],
-    "Giallo.it": ["Giallo.it"],
-    "Boing.it": ["Boing.it"],
-    "K2.it": ["K2.it"],
-    "RaiGulp.it": ["RaiGulp.it"],
-    "RaiYoyo.it": ["RaiYoyo.it"],
-    "Frisbee.it": ["Frisbee.it"],
-    "Cartoonito.it": ["Cartoonito.it"],
-    "Super.it": ["Super.it"],
-    "TgCom24.it": ["TgCom24.it"],
-    "RaiNews24.it": ["RaiNews24.it"],
-    "SkyTG24.it": ["SkyTG24.it"],
-    "Cine34.it": ["Cine34.it"],
-    "MotorTrend.it": ["MotorTrend.it"],
+
+    # Sky Sport Italia
+    "SkySportUno.it": ["Sky.Sport.Uno.it"],
+    "Sky.Sport.Uno.it": ["Sky.Sport.Uno.it"],
+    "SkySportCalcio.it": ["Sky.Sport.Calcio.it"],
+    "Sky.Sport.Calcio.it": ["Sky.Sport.Calcio.it"],
+    "SkySportTennis.it": ["Sky.Sport.Tennis.it"],
+    "Sky.Sport.Tennis.it": ["Sky.Sport.Tennis.it"],
+    "SkySportArena.it": ["Sky.Sport.Arena.it"],
+    "Sky.Sport.Arena.it": ["Sky.Sport.Arena.it"],
+    "SkySportF1.it": ["Sky.Sport.F1.it"],
+    "Sky.Sport.F1.it": ["Sky.Sport.F1.it"],
+    "SkySportMotoGP.it": ["Sky.Sport.MotoGP.it"],
+    "Sky.Sport.MotoGP.it": ["Sky.Sport.MotoGP.it"],
+    "Sky.Sport.251.it": ["Sky.Sport..251.it"],
+    "Sky.Sport..251.it": ["Sky.Sport..251.it"],
+    "Sky.Sport.252.it": ["Sky.Sport..252.it"],
+    "Sky.Sport..252.it": ["Sky.Sport..252.it"],
+    "Sky.Sport.253.it": ["Sky.Sport..253.it"],
+    "Sky.Sport..253.it": ["Sky.Sport..253.it"],
+    "Sky.Sport.254.it": ["Sky.Sport..254.it"],
+    "Sky.Sport..254.it": ["Sky.Sport..254.it"],
+
+    # Sky Uno
+    "SkyUno.it": ["Sky.Uno.it"],
+    "Sky.Uno.it": ["Sky.Uno.it"],
+    "skyuno": ["Sky.Uno.it"],
+    "Sky Uno": ["Sky.Uno.it"],
+
+    # Sky Cinema Uno
+    "SkyCinemaUno.it": ["Sky.Cinema.Uno.it"],
+    "Sky.Cinema.Uno.it": ["Sky.Cinema.Uno.it"],
+    "skycinemauno": ["Sky.Cinema.Uno.it"],
+    "Sky Cinema Uno": ["Sky.Cinema.Uno.it"],
+
+    # Sky Cinema Uno +24
+    "SkyCinemaUno+24.it": ["Sky.Cinema.Uno.24.it"],
+    "SkyCinemaUno24.it": ["Sky.Cinema.Uno.24.it"],
+    "Sky.Cinema.Uno.+24.it": ["Sky.Cinema.Uno.24.it"],
+    "Sky.Cinema.Uno.24.it": ["Sky.Cinema.Uno.24.it"],
+    "skycinemauno24": ["Sky.Cinema.Uno.24.it"],
+    "Sky Cinema Uno +24": ["Sky.Cinema.Uno.24.it"],
+
+    # Sky Cinema Collection
+    "SkyCinemaCollection.it": ["Sky.Cinema.Collection.it"],
+    "Sky.Cinema.Collection.it": ["Sky.Cinema.Collection.it"],
+    "skycinemacollection": ["Sky.Cinema.Collection.it"],
+    "Sky Cinema Collection": ["Sky.Cinema.Collection.it"],
+
+    # Sky Cinema Family
+    "SkyCinemaFamily.it": ["Sky.Cinema.Family.it"],
+    "Sky.Cinema.Family.it": ["Sky.Cinema.Family.it"],
+    "skycinemafamily": ["Sky.Cinema.Family.it"],
+    "Sky Cinema Family": ["Sky.Cinema.Family.it"],
+
+    # Sky Cinema Action
+    "SkyCinemaAction.it": ["Sky.Cinema.Action.it"],
+    "Sky.Cinema.Action.it": ["Sky.Cinema.Action.it"],
+    "skycinemaaction": ["Sky.Cinema.Action.it"],
+    "Sky Cinema Action": ["Sky.Cinema.Action.it"],
+
+    # Sky Cinema Suspense
+    "SkyCinemaSuspense.it": ["Sky.Cinema.Suspense.it"],
+    "Sky.Cinema.Suspense.it": ["Sky.Cinema.Suspense.it"],
+    "skycinemasuspense": ["Sky.Cinema.Suspense.it"],
+    "Sky Cinema Suspense": ["Sky.Cinema.Suspense.it"],
+
+    # Sky Cinema Romance
+    "SkyCinemaRomance.it": ["Sky.Cinema.Romance.it"],
+    "Sky.Cinema.Romance.it": ["Sky.Cinema.Romance.it"],
+    "skycinemaromance": ["Sky.Cinema.Romance.it"],
+    "Sky Cinema Romance": ["Sky.Cinema.Romance.it"],
+
+    # Sky Cinema Drama
+    "SkyCinemaDrama.it": ["Sky.Cinema.Drama.it"],
+    "Sky.Cinema.Drama.it": ["Sky.Cinema.Drama.it"],
+    "skycinemadrama": ["Sky.Cinema.Drama.it"],
+    "Sky Cinema Drama": ["Sky.Cinema.Drama.it"],
+
+    # Sky Cinema Comedy
+    "SkyCinemaComedy.it": ["Sky.Cinema.Comedy.it"],
+    "Sky.Cinema.Comedy.it": ["Sky.Cinema.Comedy.it"],
+    "skycinemacomedy": ["Sky.Cinema.Comedy.it"],
+    "Sky Cinema Comedy": ["Sky.Cinema.Comedy.it"],
+
+    # DAZN
+    "DAZN.1.it.it": ["DAZN.1.it.it"],
+    "DAZN.1.it": ["DAZN.1.it.it"],
+    "Zona.DAZN.it": ["DAZN.1.it.it"],
+    "zonadazn.it": ["DAZN.1.it.it"],
+
+    # Club
+    "Milan TV": ["Milan.TV.it"],
+    "Milan.TV.it": ["Milan.TV.it"],
+    "Inter TV": ["inter-it"],
+    "inter-it": ["inter-it"],
+    "Inter.it": ["inter-it"],
+
+    # RSI Svizzera
+    "RSI.La.2.ch": ["RSI.LA.2.ch"],
+    "RSI.LA.2.ch": ["RSI.LA.2.ch"],
+    "RSI.La2.ch": ["RSI.LA.2.ch"],
 
     # Eleven Sports PL
+    "Eleven.Sports.1.pl": ["Eleven.Sports.1.HD.pl"],
+    "Eleven.Sports.2.pl": ["Eleven.Sports.2.HD.pl"],
+    "Eleven.Sports.3.pl": ["Eleven.Sports.3.HD.pl"],
+    "Eleven.Sports.4.pl": ["Eleven.Sports.4.HD.pl"],
     "Eleven.Sports.1.HD.pl": ["Eleven.Sports.1.HD.pl"],
     "Eleven.Sports.2.HD.pl": ["Eleven.Sports.2.HD.pl"],
     "Eleven.Sports.3.HD.pl": ["Eleven.Sports.3.HD.pl"],
     "Eleven.Sports.4.HD.pl": ["Eleven.Sports.4.HD.pl"],
 }
-
 
 def resolve_target_ids(source_id: str) -> list[str]:
     """Risolve un channel ID sorgente verso i canali target di SuperTeo."""
@@ -591,7 +410,6 @@ def resolve_target_ids(source_id: str) -> list[str]:
     if source_id in TARGET_IDS:
         return [source_id]
     return []
-
 
 def download_file(url: str, dest_path: str) -> bool:
     print(f"[*] Download sorgente: {url}")
@@ -606,7 +424,6 @@ def download_file(url: str, dest_path: str) -> bool:
     except Exception as e:
         print(f"[!] Errore durante il download da {url}: {e}")
         return False
-
 
 def process_epg(output_gz_path: str = "epg.xml.gz"):
     temp_dir = tempfile.mkdtemp(prefix="superteo_epg_")
@@ -663,16 +480,13 @@ def process_epg(output_gz_path: str = "epg.xml.gz"):
         print(f"\n[+] Canali totali unificati: {len(channels_collected)}")
         print(f"[+] Programmi totali indicizzati: {len(programmes_collected)}")
 
-        # Verifica rapida canali chiave (inclusi Cinema, Nova Sport & Match!)
+        # Verifica rapida canali chiave (inclusi Cinema & Sky Uno)
         canali_chiave = [
             "AD.Sports.1.HD.ae", "AD.Sports.2.HD.ae",
             "Setanta.Sports.1.HD.lv", "Setanta.Sports.2.HD.lv",
             "Arena.PREMIUM.1.rs", "Arena.Sport.2.rs",
             "Arena.Sport.1.HD.hr", "Sky.Sport.Uno.it", "DAZN.1.it.it",
-            "Sky.Uno.it", "Sky.Cinema.Uno.it", "Sky.Cinema.Collection.it",
-            "Nova.Sport.1.HD.sk", "Nova.Sport.2.HD.sk",
-            "Canal+.Sport.cz", "Canal+.Sport.4.cz",
-            "Match.TV.ru", "Match.Futbol.1.ru", "Match.Premier.ru"
+            "Sky.Uno.it", "Sky.Cinema.Uno.it", "Sky.Cinema.Collection.it"
         ]
         print("\n--- STATO CANALI CHIAVE ---")
         for ck in canali_chiave:
@@ -701,7 +515,6 @@ def process_epg(output_gz_path: str = "epg.xml.gz"):
 
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
-
 
 if __name__ == "__main__":
     process_epg("epg.xml.gz")
