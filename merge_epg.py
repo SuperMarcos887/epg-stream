@@ -221,6 +221,7 @@ TARGET_IDS = {
     "Nova.Sport.4.HD.sk",
     "Nova.Sport.5.HD.sk",
     "Nova.Sport.6.HD.sk",
+	
     # Match! Sport Russia
     "Match.TV.ru",
     "Match.Futbol.1.ru",
@@ -229,6 +230,14 @@ TARGET_IDS = {
     "Match.Arena.ru",
     "Match.Premier.ru",
     "Match.Fight.ru",
+	
+	# CANAL+.Sport Slovacchia
+	"CANAL+.Sport.4.HD.sk",
+	"CANAL+.Sport.5.HD.sk",
+	"CANAL+.Sport.6.HD.sk",
+	"CANAL+.Sport.7.HD.sk",
+	"CANAL+.Sport.8.HD.sk",
+	"CANAL+.Sport.HD.sk",
 }
 
 # ==============================================================================
